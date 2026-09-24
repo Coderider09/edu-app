@@ -1,0 +1,12 @@
+line-length = 120
+target-version = "py312"
+extend-exclude = ["alembic/versions", ".venv"]
+
+[lint]
+select = ["E", "F", "I", "W", "B"]
+# B008: FastAPI dependencies are declared as call defaults by design
+ignore = ["B008"]
+
+[lint.per-file-ignores]
+"app/seed.py" = ["E501"]
+"tests/conftest.py" = ["E402"]

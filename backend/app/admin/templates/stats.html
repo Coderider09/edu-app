@@ -1,0 +1,36 @@
+{% extends "sqladmin/layout.html" %}
+{% block content %}
+<div class="container-xl">
+  <h2 class="page-title mb-3">Статистика платформы</h2>
+  <div class="row row-cards mb-4">
+    {% for label, key in [("Пользователи", "users_total"), ("Абитуриенты", "abiturients"),
+                          ("Школьники", "schoolboys"), ("Новые за неделю", "new_users_week"),
+                          ("DAU", "dau"), ("WAU", "wau"), ("Тестов пройдено", "tests_finished_total"),
+                          ("Тестов за сутки", "tests_finished_today"), ("Пробных ММТ", "exam_tests_finished"),
+                          ("Вопросов в базе", "questions_total"), ("Заблокировано", "users_blocked")] %}
+    <div class="col-sm-6 col-lg-3">
+      <div class="card card-sm"><div class="card-body">
+        <div class="text-secondary">{{ label }}</div>
+        <div class="h1 mb-0">{{ stats[key] }}</div>
+      </div></div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="card">
+    <div class="card-header"><h3 class="card-title">Результаты по кластерам (абитуриенты)</h3></div>
+    <table class="table card-table table-vcenter">
+      <thead><tr><th>Кластер</th><th>Тестов пройдено</th><th>Средняя точность, %</th><th>Средний балл ММТ</th></tr></thead>
+      <tbody>
+      {% for row in stats.by_cluster %}
+        <tr>
+          <td>{{ row.title }}</td>
+          <td>{{ row.tests_finished }}</td>
+          <td>{{ row.avg_accuracy if row.avg_accuracy is not none else "—" }}</td>
+          <td>{{ row.avg_mmt_score if row.avg_mmt_score is not none else "—" }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

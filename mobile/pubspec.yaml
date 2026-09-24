@@ -1,0 +1,45 @@
+name: eduapp
+description: Образовательная платформа для абитуриентов и школьников Таджикистана
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.6.0 <4.0.0'
+  flutter: '>=3.27.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management (one approach for the whole app)
+  flutter_riverpod: ^2.6.1
+
+  # Networking
+  dio: ^5.7.0
+
+  # Local storage: offline cache of lessons/tests and unfinished attempts
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.3.3
+
+  # Navigation
+  go_router: ^14.6.2
+
+  # Auth
+  google_sign_in: ^6.2.2
+
+  # Animations
+  confetti: ^0.8.0
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

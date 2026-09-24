@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: eduapp-postgres
+    environment:
+      POSTGRES_USER: eduapp
+      POSTGRES_PASSWORD: eduapp_password
+      POSTGRES_DB: eduapp
+    # Not published to the host (5432 is often taken); set EDUAPP_DB_PORT in a
+    # docker-compose.override.yml if you need direct access from the host.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eduapp"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: eduapp-redis
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+    container_name: eduapp-backend
+    environment:
+      DATABASE_URL: postgresql://eduapp:eduapp_password@postgres:5432/eduapp
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-change-in-production-0123456789abcdef}
+      ENVIRONMENT: development
+      FIRST_SUPERADMIN_EMAIL: ${FIRST_SUPERADMIN_EMAIL:-admin@eduapp.tj}
+      FIRST_SUPERADMIN_PASSWORD: ${FIRST_SUPERADMIN_PASSWORD:-admin12345}
+      GOOGLE_CLIENT_IDS: ${GOOGLE_CLIENT_IDS:-[]}
+    ports:
+      - "${EDUAPP_PORT:-8080}:8000"
+    volumes:
+      - ../backend/app:/app/app
+      - ../backend/alembic:/app/alembic
+      - ../backend/data:/app/data:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
+  redis_data:
