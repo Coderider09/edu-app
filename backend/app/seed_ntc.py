@@ -171,7 +171,7 @@ def seed_bank(db: Session, subjects: dict[str, Subject], bank: dict) -> int:
         if not own:
             continue
         has_bank = db.scalar(
-            select(Question.id).join(Topic).where(Topic.subject_id == subject.id, Question.source.is_not(None))
+            select(Question.id).join(Topic).where(Topic.subject_id == subject.id, Question.source.like("НЦТ%"))
         )
         if has_bank:
             continue  # already imported
@@ -220,5 +220,77 @@ def seed_bank(db: Session, subjects: dict[str, Subject], bank: dict) -> int:
                     q = _question(r, subjects[code], exam_test=exam)
                     q.order = order
                     db.add(q)
+            db.flush()
+    return count
+
+
+# ------------------------------------------------------------------ the app's own tasks
+OWN_DIR = BANK_PATH.parent / "own"
+OWN_SOURCE = "EduApp · авторские задания"
+OWN_SECTION = ("Задания повышенной сложности", "Супоришҳои мураккаб")
+
+
+def load_own_banks(directory: Optional[Path] = None) -> list[dict]:
+    """Our own tasks in the ЦВЭ format (data/own/*.json, built by `python -m tools.own_bank.build`)."""
+    directory = directory or OWN_DIR
+    return [json.loads(p.read_text(encoding="utf-8")) for p in sorted(directory.glob("*.json"))]
+
+
+def seed_own_bank(db: Session, subjects: dict[str, Subject], banks: list[dict]) -> int:
+    """A section «Задания повышенной сложности» per subject with topics; idempotent per subject and language."""
+    count = 0
+    for bank in banks:
+        by_subject: dict[tuple[str, str], list[dict]] = {}
+        for r in bank.get("questions", []):
+            by_subject.setdefault((r["subject"], r["language"]), []).append(r)
+        for (code, lang), records in by_subject.items():
+            subject = subjects.get(code)
+            if subject is None:
+                logger.warning("Own tasks for unknown subject %s skipped", code)
+                continue
+            loaded = db.scalar(
+                select(Question.id).where(
+                    Question.subject_id == subject.id,
+                    Question.language == Language(lang),
+                    Question.source.like(f"{OWN_SOURCE}%"),
+                )
+            )
+            if loaded:
+                continue
+            section = db.scalar(
+                select(Topic).where(Topic.subject_id == subject.id, Topic.title_ru == OWN_SECTION[0])
+            )
+            if section is None:
+                section = Topic(subject=subject, title_ru=OWN_SECTION[0], title_tj=OWN_SECTION[1], order=50)
+                db.add(section)
+            topics = {t.title_ru: t for t in section.child_topics}
+            for order, r in enumerate(records, start=1):
+                topic = topics.get(r["topic"])
+                title_tj = r.get("topic_tj") or r["topic"]  # translated banks share topics with the Russian one
+                if topic is None:
+                    topic = Topic(subject=subject, parent_topic=section, title_ru=r["topic"], title_tj=title_tj,
+                                  order=len(topics) + 1)
+                    db.add(topic)
+                    topics[r["topic"]] = topic
+                elif r.get("topic_tj"):
+                    topic.title_tj = title_tj
+                qtype = QuestionType(r["type"])
+                db.add(Question(
+                    question_type=qtype,
+                    language=Language(lang),
+                    passage=r.get("passage"),
+                    text=r["text"],
+                    options=r.get("options") or [],
+                    matching_left=r.get("left"),
+                    correct_answer=r["correct"],
+                    correct_option_index=r["correct"][0] if qtype == QuestionType.SINGLE else None,
+                    difficulty=Difficulty(r.get("difficulty", "hard")),
+                    explanation=r.get("explanation"),
+                    source=f"{OWN_SOURCE} · {subject.title_for(lang)}",
+                    subject=subject,
+                    topic=topic,
+                    order=order,
+                ))
+                count += 1
             db.flush()
     return count

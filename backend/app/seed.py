@@ -29,7 +29,7 @@ from app.models import (
     Topic,
     User,
 )
-from app.seed_ntc import load_bank, seed_bank, seed_structure
+from app.seed_ntc import load_bank, load_own_banks, seed_bank, seed_own_bank, seed_structure
 from app.services.gamification import ACHIEVEMENTS_SEED
 
 
@@ -542,7 +542,10 @@ def seed_superadmin(db: Session) -> None:
         user.admin_role = AdminRole.SUPERADMIN
 
 
-def seed_content(db: Session, bank_path: Optional[Path] = None, bank: Optional[dict] = None) -> None:
+def seed_content(
+    db: Session, bank_path: Optional[Path] = None, bank: Optional[dict] = None,
+    own_dir: Optional[Path] = None,
+) -> None:
     subjects = seed_structure(db)
 
     # Short theory (lessons with mini-checks) for some abiturient subjects
@@ -563,6 +566,10 @@ def seed_content(db: Session, bank_path: Optional[Path] = None, bank: Optional[d
     if bank:
         count = seed_bank(db, subjects, bank)
         print(f"Official ЦВЭ tasks loaded: {count}")
+
+    count = seed_own_bank(db, subjects, load_own_banks(own_dir))
+    if count:
+        print(f"Own tasks loaded: {count}")
 
 
 

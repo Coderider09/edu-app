@@ -1,0 +1,1067 @@
+{
+ "source": "EduApp",
+ "questions": [
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 1,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "By the time we arrived at the cinema, the film ___ for twenty minutes.",
+   "options": [
+    "was running",
+    "ran",
+    "had been running",
+    "has been running"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "Действие длилось до определённого момента в прошлом («к моменту, когда мы пришли») — Past Perfect Continuous. Present Perfect Continuous связан с настоящим и здесь не подходит."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 2,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "If I ___ harder when I was at school, I would have a better job now.",
+   "options": [
+    "had studied",
+    "have studied",
+    "would study",
+    "studied"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "Смешанное условное: условие в прошлом (when I was at school) → Past Perfect, результат в настоящем (now) → would + V. «studied» означало бы нереальное условие в настоящем."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 3,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "Hardly ___ the station when the train left.",
+   "options": [
+    "had we reached",
+    "did we reach",
+    "we reached",
+    "we had reached"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "После отрицательных наречий в начале предложения (Hardly, Scarcely, No sooner) нужна инверсия. Конструкция Hardly … when требует Past Perfect: Hardly had we reached …"
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 4,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "She is used to ___ up early, so the new timetable doesn't bother her.",
+   "options": [
+    "getting",
+    "get",
+    "have got",
+    "got"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "be used to + -ing — «иметь привычку, привыкнуть к чему-либо». Не путать с used to + V («раньше, бывало»): She used to get up early."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 5,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "I'd rather you ___ smoke in here.",
+   "options": [
+    "won't",
+    "not",
+    "didn't",
+    "don't"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "I'd rather + другое подлежащее + прошедшее время (сослагательное значение): I'd rather you didn't smoke. Если подлежащее то же самое — инфинитив без to: I'd rather not smoke."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 6,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "Don't worry, the report ___ by the time the manager comes back.",
+   "options": [
+    "will have finished",
+    "will finish",
+    "is finishing",
+    "will have been finished"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "Отчёт сам не заканчивает — нужен пассив. Действие завершится к моменту в будущем (by the time) — Future Perfect Passive: will have been + V3."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 7,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "Neither the teacher nor the students ___ aware of the change in the timetable.",
+   "options": [
+    "has been",
+    "were",
+    "is",
+    "was"
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "В конструкции neither … nor глагол согласуется с ближайшим подлежащим: the students — множественное число, поэтому were."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 8,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "It's high time we ___ home — it's already midnight.",
+   "options": [
+    "will go",
+    "went",
+    "have gone",
+    "go"
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "После It's (high) time + подлежащее используется Past Simple в значении «давно пора»: It's high time we went."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 9,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "He denied ___ the window, but everybody knew it was him.",
+   "options": [
+    "break",
+    "to have broken",
+    "to break",
+    "having broken"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "После deny используется герундий (deny doing / deny having done), а не инфинитив. Перфектный герундий подчёркивает, что действие было раньше отрицания."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 10,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "Not only ___ the exam, but she also got the highest score in the class.",
+   "options": [
+    "did she pass",
+    "she did pass",
+    "passed she",
+    "she passed"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "Not only в начале предложения требует инверсии, как в вопросе: вспомогательный глагол перед подлежащим — did she pass."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 11,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "You ___ have seen him in Dushanbe yesterday — he was in Paris then.",
+   "options": [
+    "needn't",
+    "mustn't",
+    "can't",
+    "shouldn't"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "Уверенность в том, что чего-то не было в прошлом: can't/couldn't + have + V3 («не может быть, чтобы ты его видел»). mustn't have — неправильная форма для этого значения."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 12,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "medium",
+   "text": "The more you practise, ___ you become.",
+   "options": [
+    "the more confident",
+    "the confident",
+    "more confident",
+    "the most confident"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "Конструкция «чем …, тем …»: The + сравнительная степень …, the + сравнительная степень … (The more you practise, the more confident you become)."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 13,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "I wish I ___ that to her yesterday. Now she won't talk to me.",
+   "options": [
+    "wouldn't say",
+    "haven't said",
+    "didn't say",
+    "hadn't said"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "Сожаление о прошлом: I wish + Past Perfect. I wish + Past Simple — сожаление о настоящем."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 14,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "She said, \"I will call you tomorrow.\" In reported speech this becomes:",
+   "options": [
+    "She said she will call me tomorrow.",
+    "She said she would call me the next day.",
+    "She said she would call you tomorrow.",
+    "She said she called me the next day."
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "При согласовании времён will → would, you → me (говорят мне), tomorrow → the next day."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 15,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "medium",
+   "text": "This is the house ___ my grandfather was born.",
+   "options": [
+    "what",
+    "where",
+    "that",
+    "which"
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "Придаточное обозначает место («в котором») — where = in which. «which»/«that» потребовали бы предлога: the house which my grandfather was born in."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 16,
+   "type": "single",
+   "topic": "Grammar",
+   "difficulty": "medium",
+   "text": "Each of the students ___ given a certificate at the end of the course.",
+   "options": [
+    "have been",
+    "were",
+    "was",
+    "are being"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "Each (of …) требует глагола в единственном числе: Each of the students was given …"
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 17,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Please ___ this form and hand it to the secretary.",
+   "options": [
+    "fill on",
+    "fill at",
+    "fill in",
+    "fill over"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "fill in (a form) — «заполнить (анкету, бланк)». В американском варианте также fill out."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 18,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Choose the word closest in meaning to \"reluctant\": He was reluctant to answer the question.",
+   "options": [
+    "unwilling",
+    "polite",
+    "eager",
+    "careless"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "reluctant — «неохотный, делающий что-то нехотя» = unwilling. eager — наоборот, «стремящийся»."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 19,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Don't worry if you ___ a mistake — everybody does.",
+   "options": [
+    "take",
+    "get",
+    "do",
+    "make"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "Устойчивое сочетание make a mistake. С do употребляются homework, exercises, a favour, one's best."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 20,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "hard",
+   "text": "The meeting was put off until Monday. \"Put off\" means",
+   "options": [
+    "moved earlier",
+    "arranged",
+    "postponed",
+    "cancelled"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "put off — «отложить, перенести на более поздний срок». Отменить — call off или cancel."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 21,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Choose the opposite of \"generous\".",
+   "options": [
+    "wealthy",
+    "kind",
+    "mean",
+    "brave"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "generous — «щедрый», его антоним — mean (или stingy) «скупой». wealthy — «богатый», это не антоним."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 22,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "hard",
+   "text": "The ___ of the new bridge took three years. (CONSTRUCT)",
+   "options": [
+    "constructor",
+    "constructive",
+    "constructed",
+    "construction"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "После артикля the и перед of нужно существительное со значением процесса — construction (строительство). constructor — «строитель, конструктор» (лицо), constructive — прилагательное."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 23,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "hard",
+   "text": "The actual price was much higher than we expected. \"Actual\" means",
+   "options": [
+    "modern",
+    "topical",
+    "current",
+    "real"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "«Ложный друг переводчика»: actual — «фактический, действительный», а не «актуальный» (актуальный — topical, current)."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 24,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "My cousin is fluent ___ three languages.",
+   "options": [
+    "in",
+    "at",
+    "on",
+    "with"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "Устойчивое сочетание fluent in (a language) — «свободно владеющий языком»."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 25,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "hard",
+   "text": "I can't ___ this noise any longer!",
+   "options": [
+    "put off",
+    "put up with",
+    "put down",
+    "put on with"
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "put up with — «терпеть, мириться». put off — «откладывать», put down — «записывать; подавлять»."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 26,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Choose the correctly spelled word.",
+   "options": [
+    "neccesary",
+    "necesary",
+    "necessary",
+    "neccessary"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "Правильно: necessary — одна c и две s (правило-подсказка: one Collar, two Sleeves)."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 27,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "hard",
+   "text": "We were late because there was ___ on the way to the airport.",
+   "options": [
+    "heavy traffic",
+    "strong traffic",
+    "big traffic",
+    "thick traffic"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "Устойчивое сочетание: heavy traffic — «интенсивное движение, пробки». strong/big traffic не используются."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 28,
+   "type": "single",
+   "topic": "Vocabulary",
+   "difficulty": "hard",
+   "text": "The lecture was so ___ that half of the audience fell asleep.",
+   "options": [
+    "boredom",
+    "bore",
+    "boring",
+    "bored"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "Прилагательные на -ing описывают то, что вызывает чувство (boring lecture — скучная лекция), на -ed — состояние человека (bored students — скучающие студенты)."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 29,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "hard",
+   "text": "What is TRUE about Alexei Fedchenko?",
+   "options": [
+    "He explored the Pamirs in the 1930s.",
+    "He never saw the glacier that was named after him.",
+    "He mapped the glacier in 1928.",
+    "He built a weather station on the glacier."
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "В тексте: «named after … Alexei Fedchenko, who explored Central Asia in the 1870s, although he never actually saw the glacier himself». Карту составила экспедиция 1928 года, станцию построили в 1933 году.",
+   "passage": "The Fedchenko Glacier in the Pamir Mountains of Tajikistan is one of the longest glaciers in the world outside the polar regions. It stretches for about 77 kilometres, and in places the ice is more than 900 metres thick. The glacier was named after the Russian naturalist Alexei Fedchenko, who explored Central Asia in the 1870s, although he never actually saw the glacier himself. It was first mapped in detail by an expedition in 1928.\nIn 1933 a weather station was built near the glacier at an altitude of more than 4,000 metres. For decades, the scientists who lived there measured temperature and snowfall and watched the movement of the ice. Their records show that, like most mountain glaciers, Fedchenko has been retreating: its lower end has moved back by about a kilometre, and the glacier has become thinner.\nThis matters far beyond the mountains. Meltwater from Pamir glaciers feeds rivers that millions of people downstream depend on for drinking water, farming and electricity. In the short term, faster melting can even increase the flow of rivers, but if the glaciers keep shrinking, there may eventually be much less water in the rivers during the dry summer months."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 30,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "medium",
+   "text": "According to the text, the weather station was used to",
+   "options": [
+    "collect data about the weather and the movement of the ice",
+    "train mountain climbers",
+    "provide electricity for villages",
+    "supply drinking water"
+   ],
+   "correct": [
+    0
+   ],
+   "explanation": "«scientists … measured temperature and snowfall and watched the movement of the ice». Электричество и питьевая вода упоминаются в связи с реками, а не станцией.",
+   "passage": "The Fedchenko Glacier in the Pamir Mountains of Tajikistan is one of the longest glaciers in the world outside the polar regions. It stretches for about 77 kilometres, and in places the ice is more than 900 metres thick. The glacier was named after the Russian naturalist Alexei Fedchenko, who explored Central Asia in the 1870s, although he never actually saw the glacier himself. It was first mapped in detail by an expedition in 1928.\nIn 1933 a weather station was built near the glacier at an altitude of more than 4,000 metres. For decades, the scientists who lived there measured temperature and snowfall and watched the movement of the ice. Their records show that, like most mountain glaciers, Fedchenko has been retreating: its lower end has moved back by about a kilometre, and the glacier has become thinner.\nThis matters far beyond the mountains. Meltwater from Pamir glaciers feeds rivers that millions of people downstream depend on for drinking water, farming and electricity. In the short term, faster melting can even increase the flow of rivers, but if the glaciers keep shrinking, there may eventually be much less water in the rivers during the dry summer months."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 31,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "medium",
+   "text": "According to the text, the Fedchenko Glacier has",
+   "options": [
+    "stayed the same size",
+    "grown longer",
+    "moved to a lower altitude",
+    "become shorter and thinner"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "«its lower end has moved back by about a kilometre, and the glacier has become thinner» — ледник укоротился и стал тоньше.",
+   "passage": "The Fedchenko Glacier in the Pamir Mountains of Tajikistan is one of the longest glaciers in the world outside the polar regions. It stretches for about 77 kilometres, and in places the ice is more than 900 metres thick. The glacier was named after the Russian naturalist Alexei Fedchenko, who explored Central Asia in the 1870s, although he never actually saw the glacier himself. It was first mapped in detail by an expedition in 1928.\nIn 1933 a weather station was built near the glacier at an altitude of more than 4,000 metres. For decades, the scientists who lived there measured temperature and snowfall and watched the movement of the ice. Their records show that, like most mountain glaciers, Fedchenko has been retreating: its lower end has moved back by about a kilometre, and the glacier has become thinner.\nThis matters far beyond the mountains. Meltwater from Pamir glaciers feeds rivers that millions of people downstream depend on for drinking water, farming and electricity. In the short term, faster melting can even increase the flow of rivers, but if the glaciers keep shrinking, there may eventually be much less water in the rivers during the dry summer months."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 32,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "hard",
+   "text": "Why does the author say \"This matters far beyond the mountains\"?",
+   "options": [
+    "Because tourists come from other countries.",
+    "Because the glacier can be seen from far away.",
+    "Because rivers fed by the glaciers are important for many people living downstream.",
+    "Because scientists from many countries work at the station."
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "Следующее предложение объясняет: meltwater feeds rivers that millions of people downstream depend on — от ледников зависит вода для питья, полей и электростанций ниже по течению.",
+   "passage": "The Fedchenko Glacier in the Pamir Mountains of Tajikistan is one of the longest glaciers in the world outside the polar regions. It stretches for about 77 kilometres, and in places the ice is more than 900 metres thick. The glacier was named after the Russian naturalist Alexei Fedchenko, who explored Central Asia in the 1870s, although he never actually saw the glacier himself. It was first mapped in detail by an expedition in 1928.\nIn 1933 a weather station was built near the glacier at an altitude of more than 4,000 metres. For decades, the scientists who lived there measured temperature and snowfall and watched the movement of the ice. Their records show that, like most mountain glaciers, Fedchenko has been retreating: its lower end has moved back by about a kilometre, and the glacier has become thinner.\nThis matters far beyond the mountains. Meltwater from Pamir glaciers feeds rivers that millions of people downstream depend on for drinking water, farming and electricity. In the short term, faster melting can even increase the flow of rivers, but if the glaciers keep shrinking, there may eventually be much less water in the rivers during the dry summer months."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 33,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "hard",
+   "text": "What may happen in the long term if the glaciers continue to shrink?",
+   "options": [
+    "The rivers will freeze.",
+    "There will be more floods every summer.",
+    "Power stations will produce more electricity.",
+    "There will be less water in the rivers in dry summers."
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "Автор различает краткосрочный эффект (in the short term — сток может даже вырасти) и долгосрочный (eventually — much less water … during the dry summer months). Вопрос — о долгосрочном.",
+   "passage": "The Fedchenko Glacier in the Pamir Mountains of Tajikistan is one of the longest glaciers in the world outside the polar regions. It stretches for about 77 kilometres, and in places the ice is more than 900 metres thick. The glacier was named after the Russian naturalist Alexei Fedchenko, who explored Central Asia in the 1870s, although he never actually saw the glacier himself. It was first mapped in detail by an expedition in 1928.\nIn 1933 a weather station was built near the glacier at an altitude of more than 4,000 metres. For decades, the scientists who lived there measured temperature and snowfall and watched the movement of the ice. Their records show that, like most mountain glaciers, Fedchenko has been retreating: its lower end has moved back by about a kilometre, and the glacier has become thinner.\nThis matters far beyond the mountains. Meltwater from Pamir glaciers feeds rivers that millions of people downstream depend on for drinking water, farming and electricity. In the short term, faster melting can even increase the flow of rivers, but if the glaciers keep shrinking, there may eventually be much less water in the rivers during the dry summer months."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 34,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "medium",
+   "text": "The word \"retreating\" in paragraph 2 is closest in meaning to",
+   "options": [
+    "breaking into pieces",
+    "freezing",
+    "advancing",
+    "moving back"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "retreat — «отступать». Смысл подтверждает продолжение: its lower end has moved back. advancing — противоположное значение.",
+   "passage": "The Fedchenko Glacier in the Pamir Mountains of Tajikistan is one of the longest glaciers in the world outside the polar regions. It stretches for about 77 kilometres, and in places the ice is more than 900 metres thick. The glacier was named after the Russian naturalist Alexei Fedchenko, who explored Central Asia in the 1870s, although he never actually saw the glacier himself. It was first mapped in detail by an expedition in 1928.\nIn 1933 a weather station was built near the glacier at an altitude of more than 4,000 metres. For decades, the scientists who lived there measured temperature and snowfall and watched the movement of the ice. Their records show that, like most mountain glaciers, Fedchenko has been retreating: its lower end has moved back by about a kilometre, and the glacier has become thinner.\nThis matters far beyond the mountains. Meltwater from Pamir glaciers feeds rivers that millions of people downstream depend on for drinking water, farming and electricity. In the short term, faster melting can even increase the flow of rivers, but if the glaciers keep shrinking, there may eventually be much less water in the rivers during the dry summer months."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 35,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "hard",
+   "text": "What is the main idea of the text?",
+   "options": [
+    "Students should study only in the evening.",
+    "Sleep plays an active role in learning and memory.",
+    "The brain switches off completely during sleep.",
+    "Afternoon naps are better than night sleep."
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "Главная мысль: сон — не «выключение» мозга, а активный процесс, во время которого закрепляются знания. Первый неверный вариант — устаревшее мнение, которое автор опровергает.",
+   "passage": "For a long time, sleep was seen as a passive state, a kind of 'switching off' of the brain. Research over the last few decades has shown that this is far from true. While we sleep, the brain is busy sorting the information collected during the day, strengthening some memories and letting others fade.\nIn one well-known type of experiment, volunteers learn a list of words or a new skill in the evening. Half of them then sleep normally, while the other half stay awake all night. When both groups are tested the next day, those who have slept usually remember considerably more. Interestingly, even a short afternoon nap can bring some benefit, although it cannot replace a full night's rest.\nFor students, the message is clear. Staying up all night before an exam may feel productive, but it often has the opposite effect: the material is poorly stored, and a tired brain finds it harder to concentrate and recall facts. Regular sleep, on the other hand, helps turn what we learn into lasting knowledge."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 36,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "medium",
+   "text": "In the experiments described, the volunteers who slept",
+   "options": [
+    "forgot all the words",
+    "usually remembered more the next day",
+    "learnt new skills during the night",
+    "were tested in the evening"
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "«those who have slept usually remember considerably more». Тестировали обе группы на следующий день.",
+   "passage": "For a long time, sleep was seen as a passive state, a kind of 'switching off' of the brain. Research over the last few decades has shown that this is far from true. While we sleep, the brain is busy sorting the information collected during the day, strengthening some memories and letting others fade.\nIn one well-known type of experiment, volunteers learn a list of words or a new skill in the evening. Half of them then sleep normally, while the other half stay awake all night. When both groups are tested the next day, those who have slept usually remember considerably more. Interestingly, even a short afternoon nap can bring some benefit, although it cannot replace a full night's rest.\nFor students, the message is clear. Staying up all night before an exam may feel productive, but it often has the opposite effect: the material is poorly stored, and a tired brain finds it harder to concentrate and recall facts. Regular sleep, on the other hand, helps turn what we learn into lasting knowledge."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 37,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "hard",
+   "text": "What does the text say about afternoon naps?",
+   "options": [
+    "They are useless.",
+    "They can help, but they cannot replace a full night's sleep.",
+    "They make people forget information.",
+    "They are as good as a full night's sleep."
+   ],
+   "correct": [
+    1
+   ],
+   "explanation": "«even a short afternoon nap can bring some benefit, although it cannot replace a full night's rest».",
+   "passage": "For a long time, sleep was seen as a passive state, a kind of 'switching off' of the brain. Research over the last few decades has shown that this is far from true. While we sleep, the brain is busy sorting the information collected during the day, strengthening some memories and letting others fade.\nIn one well-known type of experiment, volunteers learn a list of words or a new skill in the evening. Half of them then sleep normally, while the other half stay awake all night. When both groups are tested the next day, those who have slept usually remember considerably more. Interestingly, even a short afternoon nap can bring some benefit, although it cannot replace a full night's rest.\nFor students, the message is clear. Staying up all night before an exam may feel productive, but it often has the opposite effect: the material is poorly stored, and a tired brain finds it harder to concentrate and recall facts. Regular sleep, on the other hand, helps turn what we learn into lasting knowledge."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 38,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "hard",
+   "text": "According to the author, staying up all night before an exam",
+   "options": [
+    "is the best way to prepare",
+    "has no effect on memory",
+    "helps to concentrate",
+    "often makes the results worse"
+   ],
+   "correct": [
+    3
+   ],
+   "explanation": "«may feel productive, but it often has the opposite effect» — материал плохо запоминается, уставшему мозгу труднее сосредоточиться.",
+   "passage": "For a long time, sleep was seen as a passive state, a kind of 'switching off' of the brain. Research over the last few decades has shown that this is far from true. While we sleep, the brain is busy sorting the information collected during the day, strengthening some memories and letting others fade.\nIn one well-known type of experiment, volunteers learn a list of words or a new skill in the evening. Half of them then sleep normally, while the other half stay awake all night. When both groups are tested the next day, those who have slept usually remember considerably more. Interestingly, even a short afternoon nap can bring some benefit, although it cannot replace a full night's rest.\nFor students, the message is clear. Staying up all night before an exam may feel productive, but it often has the opposite effect: the material is poorly stored, and a tired brain finds it harder to concentrate and recall facts. Regular sleep, on the other hand, helps turn what we learn into lasting knowledge."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 39,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "medium",
+   "text": "The phrase \"far from true\" (paragraph 1) means",
+   "options": [
+    "partly correct",
+    "well known",
+    "completely wrong",
+    "difficult to prove"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "far from true — «далеко не так, совершенно неверно». Автор опровергает мнение о сне как пассивном состоянии.",
+   "passage": "For a long time, sleep was seen as a passive state, a kind of 'switching off' of the brain. Research over the last few decades has shown that this is far from true. While we sleep, the brain is busy sorting the information collected during the day, strengthening some memories and letting others fade.\nIn one well-known type of experiment, volunteers learn a list of words or a new skill in the evening. Half of them then sleep normally, while the other half stay awake all night. When both groups are tested the next day, those who have slept usually remember considerably more. Interestingly, even a short afternoon nap can bring some benefit, although it cannot replace a full night's rest.\nFor students, the message is clear. Staying up all night before an exam may feel productive, but it often has the opposite effect: the material is poorly stored, and a tired brain finds it harder to concentrate and recall facts. Regular sleep, on the other hand, helps turn what we learn into lasting knowledge."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 40,
+   "type": "single",
+   "topic": "Reading comprehension",
+   "difficulty": "medium",
+   "text": "The word \"lasting\" in the last sentence is closest in meaning to",
+   "options": [
+    "quick",
+    "final",
+    "long-term",
+    "late"
+   ],
+   "correct": [
+    2
+   ],
+   "explanation": "lasting knowledge — «прочные, долговременные знания» (от to last — «длиться»). last в значении «последний» (final) здесь не подходит.",
+   "passage": "For a long time, sleep was seen as a passive state, a kind of 'switching off' of the brain. Research over the last few decades has shown that this is far from true. While we sleep, the brain is busy sorting the information collected during the day, strengthening some memories and letting others fade.\nIn one well-known type of experiment, volunteers learn a list of words or a new skill in the evening. Half of them then sleep normally, while the other half stay awake all night. When both groups are tested the next day, those who have slept usually remember considerably more. Interestingly, even a short afternoon nap can bring some benefit, although it cannot replace a full night's rest.\nFor students, the message is clear. Staying up all night before an exam may feel productive, but it often has the opposite effect: the material is poorly stored, and a tired brain finds it harder to concentrate and recall facts. Regular sleep, on the other hand, helps turn what we learn into lasting knowledge."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 1,
+   "type": "matching",
+   "topic": "Vocabulary",
+   "difficulty": "hard",
+   "text": "Match the adjectives with their definitions.",
+   "left": [
+    "reliable",
+    "ambitious",
+    "stubborn",
+    "thrifty"
+   ],
+   "options": [
+    "easily frightened",
+    "having a strong desire to succeed",
+    "able to be trusted",
+    "refusing to change one's opinion",
+    "careful not to waste money"
+   ],
+   "correct": [
+    2,
+    1,
+    3,
+    4
+   ],
+   "explanation": "reliable — надёжный; ambitious — честолюбивый; stubborn — упрямый; thrifty — бережливый. «easily frightened» (timid) — лишнее определение."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 2,
+   "type": "matching",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Match the phrasal verbs with their meanings.",
+   "left": [
+    "give up",
+    "look after",
+    "turn down",
+    "come across"
+   ],
+   "options": [
+    "stop doing something",
+    "take care of",
+    "find by chance",
+    "refuse an offer",
+    "continue"
+   ],
+   "correct": [
+    0,
+    1,
+    3,
+    2
+   ],
+   "explanation": "give up — бросить (привычку, попытки); look after — заботиться; turn down — отклонить (предложение); come across — случайно найти, наткнуться. «continue» — это carry on / go on."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 3,
+   "type": "matching",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "Match the beginnings of the sentences with their endings.",
+   "left": [
+    "If you heat ice,",
+    "If it rains tomorrow,",
+    "If I were you,",
+    "If she had left earlier,"
+   ],
+   "options": [
+    "it melts.",
+    "I would apologise.",
+    "we will stay at home.",
+    "had stayed at home.",
+    "she wouldn't have missed the bus."
+   ],
+   "correct": [
+    0,
+    2,
+    1,
+    4
+   ],
+   "explanation": "Zero conditional (общая истина): If + Present, Present. First (реальное будущее): If + Present, will + V. Second (нереальное настоящее): If + Past (were), would + V. Third (нереальное прошлое): If + Past Perfect, would have + V3. «had stayed at home» не подходит ни к одному началу."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 4,
+   "type": "matching",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Match the formal verbs with their everyday synonyms.",
+   "left": [
+    "to purchase",
+    "to assist",
+    "to require",
+    "to obtain"
+   ],
+   "options": [
+    "to buy",
+    "to need",
+    "to help",
+    "to get",
+    "to sell"
+   ],
+   "correct": [
+    0,
+    2,
+    1,
+    3
+   ],
+   "explanation": "purchase = buy; assist = help; require = need; obtain = get. Формальные глаголы часто встречаются в официальных текстах и объявлениях."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 5,
+   "type": "matching",
+   "topic": "Grammar",
+   "difficulty": "medium",
+   "text": "Match the words with the prepositions that follow them.",
+   "left": [
+    "to depend",
+    "to be interested",
+    "to be afraid",
+    "to apologise"
+   ],
+   "options": [
+    "at",
+    "of",
+    "in",
+    "for",
+    "on"
+   ],
+   "correct": [
+    4,
+    2,
+    1,
+    3
+   ],
+   "explanation": "depend on, be interested in, be afraid of, apologise for (something) / to (somebody)."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 6,
+   "type": "matching",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "Match the sentences with the tenses used in them.",
+   "left": [
+    "She has lived here since 2010.",
+    "They were watching TV when I came in.",
+    "By 2030 he will have graduated.",
+    "I had finished my work before she arrived."
+   ],
+   "options": [
+    "Past Perfect",
+    "Present Perfect Continuous",
+    "Future Perfect",
+    "Past Continuous",
+    "Present Perfect"
+   ],
+   "correct": [
+    4,
+    3,
+    2,
+    0
+   ],
+   "explanation": "has lived — Present Perfect (с since); were watching — Past Continuous; will have graduated — Future Perfect; had finished — Past Perfect."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 7,
+   "type": "matching",
+   "topic": "Vocabulary",
+   "difficulty": "hard",
+   "text": "Match the idioms with their meanings.",
+   "left": [
+    "a piece of cake",
+    "once in a blue moon",
+    "to break the ice",
+    "to cost an arm and a leg"
+   ],
+   "options": [
+    "very rarely",
+    "very expensive",
+    "to be very hungry",
+    "very easy",
+    "to start a conversation and make people feel relaxed"
+   ],
+   "correct": [
+    3,
+    0,
+    4,
+    1
+   ],
+   "explanation": "a piece of cake — «проще простого»; once in a blue moon — «очень редко»; to break the ice — «растопить лёд» в общении; to cost an arm and a leg — «стоить целое состояние»."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 8,
+   "type": "matching",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Match the British English words with their American English equivalents.",
+   "left": [
+    "flat",
+    "lift",
+    "petrol",
+    "autumn"
+   ],
+   "options": [
+    "elevator",
+    "apartment",
+    "truck",
+    "gas",
+    "fall"
+   ],
+   "correct": [
+    1,
+    0,
+    3,
+    4
+   ],
+   "explanation": "flat — apartment, lift — elevator, petrol — gas (gasoline), autumn — fall. truck — американское соответствие британского lorry."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 9,
+   "type": "matching",
+   "topic": "Vocabulary",
+   "difficulty": "medium",
+   "text": "Match the words with their opposites.",
+   "left": [
+    "ancient",
+    "guilty",
+    "temporary",
+    "rare"
+   ],
+   "options": [
+    "modern",
+    "common",
+    "innocent",
+    "permanent",
+    "dangerous"
+   ],
+   "correct": [
+    0,
+    2,
+    3,
+    1
+   ],
+   "explanation": "ancient — modern (древний — современный), guilty — innocent (виновный — невиновный), temporary — permanent (временный — постоянный), rare — common (редкий — распространённый)."
+  },
+  {
+   "subject": "english",
+   "language": "ru",
+   "number": 10,
+   "type": "matching",
+   "topic": "Grammar",
+   "difficulty": "hard",
+   "text": "Match the direct speech with the correct reported speech.",
+   "left": [
+    "\"I am tired,\" she said.",
+    "\"I have finished,\" he said.",
+    "\"I will help,\" he said.",
+    "\"Can you swim?\" she asked me."
+   ],
+   "options": [
+    "He said he had finished.",
+    "She said she was tired.",
+    "She asked me could I swim.",
+    "She asked me if I could swim.",
+    "He said he would help."
+   ],
+   "correct": [
+    1,
+    0,
+    4,
+    3
+   ],
+   "explanation": "Сдвиг времён: am → was, have finished → had finished, will → would, can → could. В косвенном общем вопросе используется if/whether и прямой порядок слов, поэтому «asked me could I swim» неверно."
+  }
+ ]
+}
