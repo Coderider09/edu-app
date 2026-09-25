@@ -44,53 +44,57 @@ class AuthScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final top = MediaQuery.paddingOf(context).top;
+    // One Column holds everything: the card is shifted up over the header, and taps
+    // only reach it while the shifted area stays inside the same list item.
     return Scaffold(
       body: ListView(padding: EdgeInsets.zero, children: [
-        AuroraBackground(
-          colors: brandGradient,
-          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(40)),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(24, top + 28, 24, 84),
-            child: Column(children: [
-              const FadeSlideIn(scale: true, child: AppLogo()),
-              const SizedBox(height: 18),
-              FadeSlideIn(
-                delay: Stagger.of(1, stepMs: 90),
-                child: Text(title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: Colors.white, fontSize: 30, fontWeight: FontWeight.w900, letterSpacing: -0.6)),
-              ),
-              const SizedBox(height: 6),
-              FadeSlideIn(
-                delay: Stagger.of(2, stepMs: 90),
-                child: Text(subtitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.88), fontSize: 15, height: 1.4)),
-              ),
-            ]),
+        Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          AuroraBackground(
+            colors: brandGradient,
+            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(40)),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(24, top + 28, 24, 84),
+              child: Column(children: [
+                const FadeSlideIn(scale: true, child: AppLogo()),
+                const SizedBox(height: 18),
+                FadeSlideIn(
+                  delay: Stagger.of(1, stepMs: 90),
+                  child: Text(title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.white, fontSize: 30, fontWeight: FontWeight.w900, letterSpacing: -0.6)),
+                ),
+                const SizedBox(height: 6),
+                FadeSlideIn(
+                  delay: Stagger.of(2, stepMs: 90),
+                  child: Text(subtitle,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.88), fontSize: 15, height: 1.4)),
+                ),
+              ]),
+            ),
           ),
-        ),
-        Transform.translate(
-          offset: const Offset(0, -60),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: FadeSlideIn(
-              delay: Stagger.of(3, stepMs: 90),
-              offset: const Offset(0, 40),
-              child: AppCard(
-                padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-                shadowColor: brandGradient.first,
-                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+          Transform.translate(
+            offset: const Offset(0, -60),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: FadeSlideIn(
+                delay: Stagger.of(3, stepMs: 90),
+                offset: const Offset(0, 40),
+                child: AppCard(
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+                  shadowColor: brandGradient.first,
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+                ),
               ),
             ),
           ),
-        ),
-        if (footer != null)
-          Transform.translate(
-            offset: const Offset(0, -44),
-            child: FadeSlideIn(delay: Stagger.of(5, stepMs: 90), child: footer!),
-          ),
+          if (footer != null)
+            Transform.translate(
+              offset: const Offset(0, -44),
+              child: FadeSlideIn(delay: Stagger.of(5, stepMs: 90), child: footer!),
+            ),
+        ]),
       ]),
     );
   }
