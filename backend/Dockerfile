@@ -17,7 +17,7 @@ COPY alembic.ini docker-entrypoint.sh ./
 # Built offline packs (app/services/packs.py) go to a writable directory
 ENV PACKS_DIR=/app/packs
 RUN chmod +x docker-entrypoint.sh && useradd --create-home appuser \
-    && mkdir -p /app/packs && chown appuser /app/packs
+    && mkdir -p /app/packs /app/app/static && chown appuser /app/packs /app/app/static
 USER appuser
 
 EXPOSE 8000
