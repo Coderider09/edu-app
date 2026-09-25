@@ -6,6 +6,7 @@ import '../../core/settings.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models.dart';
 import '../../data/repositories.dart';
+import '../../offline/sync_service.dart';
 
 enum SessionStatus { loading, loggedOut, needsRole, ready, error }
 
@@ -89,6 +90,12 @@ class SessionController extends Notifier<SessionState> {
   }
 
   Future<void> logout() async {
+    // Upload offline results first: the local queue is cleared together with the session
+    if (state.status == SessionStatus.ready) {
+      try {
+        await ref.read(syncServiceProvider).run().timeout(const Duration(seconds: 10));
+      } catch (_) {}
+    }
     await AppConfig.clearSession();
     ref.read(branchProvider.notifier).state = Branch.neutral;
     state = const SessionState(SessionStatus.loggedOut);

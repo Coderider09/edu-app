@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +11,21 @@ import '../../core/widgets/markdown_view.dart';
 import '../../data/models.dart';
 
 const _letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+/// Task image: a file of a downloaded pack ("file://...") or an image served by the API.
+Widget taskImage(
+  String url, {
+  double? width,
+  BoxFit? fit,
+  ImageLoadingBuilder? loadingBuilder,
+  ImageErrorWidgetBuilder? errorBuilder,
+}) {
+  if (url.startsWith('file://')) {
+    return Image.file(File(url.substring('file://'.length)), width: width, fit: fit, errorBuilder: errorBuilder);
+  }
+  return Image.network(AppConfig.mediaUrl(url),
+      width: width, fit: fit, loadingBuilder: loadingBuilder, errorBuilder: errorBuilder);
+}
 
 Offset _centerOf(BuildContext context) {
   final box = context.findRenderObject() as RenderBox?;
@@ -50,7 +67,7 @@ class QuestionContent extends ConsumerWidget {
               child: Stack(children: [
                 InteractiveViewer(
                   maxScale: 5,
-                  child: Center(child: Image.network(AppConfig.mediaUrl(imageUrl!))),
+                  child: Center(child: taskImage(imageUrl!)),
                 ),
                 const Positioned(top: 8, right: 8, child: CloseButton(color: Colors.black)),
               ]),
@@ -65,8 +82,8 @@ class QuestionContent extends ConsumerWidget {
             ),
             clipBehavior: Clip.antiAlias,
             child: Stack(children: [
-              Image.network(
-                AppConfig.mediaUrl(imageUrl!),
+              taskImage(
+                imageUrl!,
                 width: double.infinity,
                 fit: BoxFit.fitWidth,
                 loadingBuilder: (context, child, progress) => progress == null

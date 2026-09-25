@@ -39,12 +39,14 @@ services:
       FIRST_SUPERADMIN_EMAIL: ${FIRST_SUPERADMIN_EMAIL:-admin@eduapp.tj}
       FIRST_SUPERADMIN_PASSWORD: ${FIRST_SUPERADMIN_PASSWORD:-admin12345}
       GOOGLE_CLIENT_IDS: ${GOOGLE_CLIENT_IDS:-[]}
+      PACKS_DIR: /app/packs
     ports:
       - "${EDUAPP_PORT:-8080}:8000"
     volumes:
       - ../backend/app:/app/app
       - ../backend/alembic:/app/alembic
       - ../backend/data:/app/data:ro
+      - packs_data:/app/packs
     depends_on:
       postgres:
         condition: service_healthy
@@ -55,3 +57,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  packs_data:

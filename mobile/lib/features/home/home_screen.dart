@@ -8,12 +8,14 @@ import '../../core/widgets/common.dart';
 import '../../data/models.dart';
 import '../../data/repositories.dart';
 import '../abiturient/screens/abiturient_dashboard.dart';
+import '../../offline/sync_service.dart';
 import '../auth/session_controller.dart';
 import '../school/screens/school_dashboard.dart';
 
 final dashboardProvider = FutureProvider.autoDispose<Dashboard>((ref) {
   // Reload when the active role or the content language changes
   ref.watch(sessionProvider.select((s) => (s.profile?.activeRole, s.profile?.language)));
+  ref.watch(syncTickProvider); // offline results were uploaded
   return ref.watch(contentRepositoryProvider).dashboard();
 });
 

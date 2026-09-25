@@ -82,6 +82,16 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ]),
         ),
+        const SizedBox(height: 8),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.download_for_offline_rounded),
+            title: Text(s['offline_materials']),
+            subtitle: Text(s['offline_materials_desc']),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () => context.push('/downloads'),
+          ),
+        ),
         if (profile != null) ...[
           SectionTitle(s['roles']),
           Card(

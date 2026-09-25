@@ -5,6 +5,7 @@ import '../../../core/l10n/strings.dart';
 import '../../../core/widgets/common.dart';
 import '../../../data/models.dart';
 import '../../home/home_screen.dart';
+import '../../offline/downloads_screen.dart';
 
 /// Schoolboy home: subjects of the grade with progress.
 class SchoolDashboard extends ConsumerWidget {
@@ -31,6 +32,7 @@ class SchoolDashboard extends ConsumerWidget {
             child: ListView(padding: const EdgeInsets.fromLTRB(20, 12, 20, 32), children: [
               if (data.fromCache) const Padding(padding: EdgeInsets.only(bottom: 12), child: OfflineBanner()),
               DashboardHeader(data: data, subtitle: s.f('grade_n', {'n': data.grade ?? ''})),
+              const OfflinePromoCard(),
               if (data.unfinished != null) ContinueTestCard(attempt: data.unfinished!),
               SectionTitle(s['subjects']),
               if (data.subjects.isEmpty)

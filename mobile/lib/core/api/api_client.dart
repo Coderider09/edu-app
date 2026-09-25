@@ -115,6 +115,15 @@ class ApiClient {
   }
 
   Future<dynamic> post(String path, {Object? data}) => _send(() => _dio.post(path, data: data));
+
+  /// Downloads a file (offline packs) to [savePath]; [onProgress] gets (received, total bytes).
+  Future<void> download(String path, String savePath, {void Function(int, int)? onProgress}) =>
+      _send(() => _dio.download(
+            path,
+            savePath,
+            onReceiveProgress: onProgress,
+            options: Options(receiveTimeout: const Duration(minutes: 10)),
+          ));
   Future<dynamic> patch(String path, {Object? data}) => _send(() => _dio.patch(path, data: data));
   Future<dynamic> delete(String path) => _send(() => _dio.delete(path));
 

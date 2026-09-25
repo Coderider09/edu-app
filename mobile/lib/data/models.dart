@@ -88,6 +88,9 @@ class Profile {
   });
 
   bool get isAbiturient => activeRole == 'abiturient';
+
+  /// Language of lessons and tasks: a schoolboy's language of study, otherwise the interface language.
+  String get contentLanguage => activeRole == 'schoolboy' && school != null ? school!.languageOfStudy : language;
   bool hasRole(String role) => roles.contains(role);
 
   factory Profile.fromJson(Map<String, dynamic> j) => Profile(
@@ -526,6 +529,9 @@ class AttemptResult {
   final Level level;
   final List<ReviewItem> review;
 
+  /// Taken offline: shown from the device, bonuses and achievements come after the upload.
+  final bool pendingSync;
+
   const AttemptResult({
     required this.attemptId,
     required this.testType,
@@ -544,6 +550,7 @@ class AttemptResult {
     required this.totalPoints,
     required this.level,
     required this.review,
+    this.pendingSync = false,
   });
 
   factory AttemptResult.fromJson(Map<String, dynamic> j) => AttemptResult(
@@ -564,6 +571,7 @@ class AttemptResult {
         totalPoints: _int(j['total_points']),
         level: Level.fromJson(Map<String, dynamic>.from(j['level'] ?? const {})),
         review: _list(j['review'], ReviewItem.fromJson),
+        pendingSync: j['pending_sync'] == true,
       );
 }
 

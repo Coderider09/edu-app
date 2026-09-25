@@ -17,6 +17,7 @@ import '../features/onboarding/screens/splash_screen.dart';
 import '../features/profile/profile_screen.dart';
 import '../features/profile/settings_screen.dart';
 import '../features/subject/subject_screen.dart';
+import '../features/offline/downloads_screen.dart';
 import '../features/test/result_screen.dart';
 import '../features/test/test_screen.dart';
 import '../data/models.dart';
@@ -142,6 +143,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(path: '/settings', pageBuilder: (c, s) => _page(s, const SettingsScreen())),
+      GoRoute(path: '/downloads', pageBuilder: (c, s) => _page(s, const DownloadsScreen())),
     ],
   );
 });

@@ -34,10 +34,14 @@ class PointsReason(str, enum.Enum):
 
 class TestAttempt(Base):
     __tablename__ = "test_attempts"
-    __table_args__ = (Index("ix_attempt_user_type_ref", "user_id", "test_type", "reference_id"),)
+    __table_args__ = (
+        Index("ix_attempt_user_type_ref", "user_id", "test_type", "reference_id"),
+        UniqueConstraint("user_id", "client_id", name="uq_attempt_user_client"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    client_id: Mapped[Optional[str]] = mapped_column(String(64))  # id of an offline attempt uploaded via /sync
     role: Mapped[UserRole] = mapped_column(str_enum(UserRole))
     test_type: Mapped[TestType] = mapped_column(str_enum(TestType))
     reference_id: Mapped[Optional[int]] = mapped_column(Integer)  # topic/section/subject/exam/lesson id

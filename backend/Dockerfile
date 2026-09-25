@@ -14,7 +14,10 @@ COPY app/ ./app/
 COPY data/ ./data/
 COPY alembic/ ./alembic/
 COPY alembic.ini docker-entrypoint.sh ./
-RUN chmod +x docker-entrypoint.sh && useradd --create-home appuser
+# Built offline packs (app/services/packs.py) go to a writable directory
+ENV PACKS_DIR=/app/packs
+RUN chmod +x docker-entrypoint.sh && useradd --create-home appuser \
+    && mkdir -p /app/packs && chown appuser /app/packs
 USER appuser
 
 EXPOSE 8000

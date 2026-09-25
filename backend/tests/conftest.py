@@ -6,6 +6,7 @@ os.environ["DATABASE_URL"] = f"sqlite:///{_db_file}"
 os.environ["REDIS_URL"] = ""  # in-memory cache/rate limiter
 os.environ["SECRET_KEY"] = "test-secret"
 os.environ["LOGIN_RATE_LIMIT"] = "5"
+os.environ["PACKS_DIR"] = os.path.join(tempfile.gettempdir(), "eduapp_test_packs")
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
@@ -17,6 +18,7 @@ from app.db.database import Base, SessionLocal, engine  # noqa: E402
 from app.main import app  # noqa: E402
 from app.models import AdminRole, Cluster, Subject, User  # noqa: E402
 from app.seed import seed_achievements, seed_content  # noqa: E402
+from app.services import packs  # noqa: E402
 from app.services.cache import cache  # noqa: E402
 from tests.fixtures import small_bank  # noqa: E402
 
@@ -26,6 +28,7 @@ def database():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     cache.reset_memory()
+    packs.invalidate()
     with SessionLocal() as db:
         seed_achievements(db)
         seed_content(db, bank=small_bank())

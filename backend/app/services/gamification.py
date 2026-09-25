@@ -123,7 +123,7 @@ def register_activity(user: User, now: Optional[datetime] = None) -> None:
     """Update the daily streak: consecutive local days with at least one answer."""
     today = local_today(now)
     last = user.last_activity_date
-    if last == today:
+    if last is not None and today <= last:  # same day, or an older offline answer synced late
         return
     if last == today - timedelta(days=1):
         user.current_streak = (user.current_streak or 0) + 1

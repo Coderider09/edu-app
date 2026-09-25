@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
 from app.admin.admin import setup_admin
-from app.api.v1 import admin, auth, content, onboarding, profile, testing
+from app.api.v1 import admin, auth, content, offline, onboarding, profile, testing
 from app.core.config import settings
 from app.db.database import engine
 
@@ -48,6 +48,7 @@ app.include_router(onboarding.router, prefix=API, tags=["onboarding"])
 app.include_router(content.router, prefix=API, tags=["content"])
 app.include_router(testing.router, prefix=API, tags=["testing"])
 app.include_router(profile.router, prefix=API, tags=["profile"])
+app.include_router(offline.router, prefix=API, tags=["offline"])
 app.include_router(admin.router, prefix=f"{API}/admin", tags=["admin"])
 
 setup_admin(app, engine)

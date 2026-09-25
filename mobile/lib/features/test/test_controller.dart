@@ -8,6 +8,9 @@ import '../../config/app_config.dart';
 import '../../core/api/api_client.dart';
 import '../../data/models.dart';
 import '../../data/repositories.dart';
+import '../../offline/offline_testing.dart';
+import '../../offline/sync_service.dart';
+import '../auth/session_controller.dart';
 
 /// What to start: test type + reference (topic/section/subject/exam/lesson id).
 class TestLaunch {
@@ -118,12 +121,19 @@ class TestState {
 }
 
 /// Runs one attempt: loading/resuming, answering (queued offline), timer and finishing.
+///
+/// When the packs of the test are downloaded the attempt runs on the device ([OfflineTesting]):
+/// instant feedback without internet, the result is uploaded later by [SyncService].
 class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
   Timer? _timer;
   Duration _clockOffset = Duration.zero;
+  bool _local = false;
 
   Box<String> get _box => Hive.box<String>(AppConfig.attemptsBox);
   TestingRepository get _repo => ref.read(testingRepositoryProvider);
+  OfflineTesting get _offline => ref.read(offlineTestingProvider);
+
+  String get _lang => ref.read(sessionProvider).profile?.contentLanguage ?? 'tj';
 
   @override
   TestState build(TestLaunch launch) {
@@ -138,6 +148,17 @@ class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
     state = const TestState();
     Map<String, dynamic>? raw;
     try {
+      raw = await _offline.start(arg.testType, arg.referenceId,
+          lang: _lang, timed: arg.timed, questionCount: arg.questionCount);
+    } catch (_) {
+      raw = null; // a broken pack must not block the test: fall back to the server
+    }
+    _local = raw != null;
+    if (_local) {
+      _show(Attempt.fromJson(raw!));
+      return;
+    }
+    try {
       raw = await _repo.start(arg.testType,
           referenceId: arg.referenceId, timed: arg.timed, questionCount: arg.questionCount);
       await _box.put(arg.storageKey, jsonEncode(raw));
@@ -150,7 +171,10 @@ class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
       }
       raw = Map<String, dynamic>.from(jsonDecode(saved));
     }
-    final attempt = Attempt.fromJson(raw!);
+    _show(Attempt.fromJson(raw!));
+  }
+
+  void _show(Attempt attempt) {
     _clockOffset = attempt.serverTime.difference(DateTime.now());
 
     final answers = Map<int, AnswerFeedback>.from(attempt.answers);
@@ -167,7 +191,7 @@ class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
       streak: attempt.answerStreak,
     );
     _startTimer();
-    unawaited(_flushPending());
+    if (!_local) unawaited(_flushPending());
   }
 
   void _startTimer() {
@@ -207,7 +231,7 @@ class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
   /// Sends answers given offline. Returns true when nothing is left in the queue.
   Future<bool> _flushPending() async {
     final attempt = state.attempt;
-    if (attempt == null) return true;
+    if (attempt == null || _local) return true;
     final queue = _pending(attempt.id);
     while (queue.isNotEmpty) {
       final (qid, option) = queue.first;
@@ -236,7 +260,7 @@ class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
     state = state.copyWith(submitting: true);
     try {
       await _flushPending();
-      final r = await _repo.answer(attempt.id, q.id, option);
+      final r = _local ? await _offline.answer(attempt.id, q.id, option) : await _repo.answer(attempt.id, q.id, option);
       final fb = AnswerFeedback.fromJson(r, option);
       final answers = Map<int, AnswerFeedback>.from(state.answers)..[q.id] = fb;
       state = state.copyWith(
@@ -298,6 +322,14 @@ class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
     state = state.copyWith(marked: marked);
     try {
       await _repo.mark(q.id, nowMarked);
+    } on ApiException catch (e) {
+      if (e.offline) {
+        await ref.read(syncServiceProvider).queueMark(q.id, nowMarked); // sent with the next sync
+        return;
+      }
+      final revert = Set<int>.from(state.marked);
+      nowMarked ? revert.remove(q.id) : revert.add(q.id);
+      state = state.copyWith(marked: revert);
     } catch (_) {
       final revert = Set<int>.from(state.marked);
       nowMarked ? revert.remove(q.id) : revert.add(q.id);
@@ -310,6 +342,12 @@ class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
     if (attempt == null || state.finishing || state.result != null) return;
     state = state.copyWith(finishing: true, clearFinishError: true);
     _timer?.cancel();
+    if (_local) {
+      final result = AttemptResult.fromJson(await _offline.finish(attempt.id));
+      state = state.copyWith(finishing: false, result: result);
+      unawaited(ref.read(syncServiceProvider).run());
+      return;
+    }
     if (!await _flushPending()) {
       state = state.copyWith(finishing: false, finishError: 'offline');
       return;

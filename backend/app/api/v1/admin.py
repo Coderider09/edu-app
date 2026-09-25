@@ -10,6 +10,7 @@ from app.core.deps import require_content_manager, require_superadmin
 from app.db.database import Base, get_db
 from app.models import Cluster, ClusterSubject, ExamTest, Lesson, Question, Subject, Topic, User
 from app.schemas.admin import ClusterIn, ClusterSubjectIn, ExamTestIn, LessonIn, QuestionIn, SubjectIn, TopicIn
+from app.services import packs
 from app.services.stats import collect_stats
 
 router = APIRouter()
@@ -25,6 +26,7 @@ def _save(db: Session, obj: Base) -> dict:
     except IntegrityError as exc:
         db.rollback()
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Integrity error: {exc.orig}") from exc
+    packs.invalidate()  # offline packs are rebuilt with the new content
     db.refresh(obj)
     return _to_dict(obj)
 
@@ -69,6 +71,7 @@ def _register_crud(path: str, model: Type[Base], schema: Type[BaseModel]) -> Non
         except IntegrityError:
             db.rollback()
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Object is still referenced") from None
+        packs.invalidate()
 
 
 _register_crud("clusters", Cluster, ClusterIn)

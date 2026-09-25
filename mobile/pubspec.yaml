@@ -24,6 +24,9 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_secure_storage: ^9.2.2
   shared_preferences: ^2.3.3
+  # Offline packs: downloaded ZIPs (content + task images) unpacked to app storage
+  path_provider: ^2.1.5
+  archive: ^3.6.1
 
   # Navigation
   go_router: ^14.6.2

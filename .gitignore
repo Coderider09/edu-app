@@ -118,3 +118,6 @@ backend/data/*.log
 # Rebuild locally: cd backend && python -m tools.ntc_import
 backend/data/ntc_bank.json
 backend/app/static/ntc/
+
+# Built offline content packs (backend/app/services/packs.py)
+backend/data/packs/

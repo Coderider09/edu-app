@@ -257,7 +257,9 @@ class ErrorView extends ConsumerWidget {
 }
 
 class OfflineBanner extends ConsumerWidget {
-  const OfflineBanner({super.key});
+  /// String key of the message; by default "showing saved data".
+  final String messageKey;
+  const OfflineBanner({super.key, this.messageKey = 'offline_cached'});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -269,7 +271,7 @@ class OfflineBanner extends ConsumerWidget {
       child: Row(children: [
         const Icon(Icons.cloud_off_rounded, size: 18),
         const SizedBox(width: 8),
-        Expanded(child: Text(s['offline_cached'], style: const TextStyle(fontSize: 13))),
+        Expanded(child: Text(s[messageKey], style: const TextStyle(fontSize: 13))),
       ]),
     );
   }

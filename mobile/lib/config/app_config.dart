@@ -15,6 +15,7 @@ class AppConfig {
   static const String googleServerClientId = String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID');
 
   /// Task images are served by the API as relative paths ("/static/ntc/...").
+  /// Images of downloaded packs are local files ("file://...").
   static String mediaUrl(String url) => url.startsWith('/') ? '$apiBaseUrl$url' : url;
 
   static late final SharedPreferences prefs;
@@ -24,11 +25,15 @@ class AppConfig {
 
   static const cacheBox = 'http_cache';
   static const attemptsBox = 'attempts';
+  static const packsBox = 'packs'; // downloaded offline packs and the cluster structures
+  static const syncBox = 'sync'; // work done offline, waiting for upload
 
   static Future<void> init() async {
     await Hive.initFlutter();
     await Hive.openBox<String>(cacheBox);
     await Hive.openBox<String>(attemptsBox);
+    await Hive.openBox<String>(packsBox);
+    await Hive.openBox<String>(syncBox);
     prefs = await SharedPreferences.getInstance();
   }
 
@@ -45,6 +50,8 @@ class AppConfig {
     await secureStorage.delete(key: 'refresh_token');
     await Hive.box<String>(cacheBox).clear();
     await Hive.box<String>(attemptsBox).clear();
+    // Downloaded packs are not personal and stay; unsent offline work belongs to the user
+    await Hive.box<String>(syncBox).clear();
   }
 
   static bool get onboardingSeen => prefs.getBool('onboarding_seen') ?? false;

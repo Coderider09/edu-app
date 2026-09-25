@@ -3,16 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/api/api_client.dart';
 import '../../core/l10n/strings.dart';
 import '../../core/motion.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/common.dart';
 import '../../data/models.dart';
 import '../../data/repositories.dart';
+import '../../offline/offline_testing.dart';
 import 'question_widgets.dart';
 
-final resultProvider = FutureProvider.autoDispose
-    .family<AttemptResult, int>((ref, id) => ref.watch(testingRepositoryProvider).result(id));
+final resultProvider = FutureProvider.autoDispose.family<AttemptResult, int>((ref, id) async {
+  if (id < 0) {
+    // Negative ids are attempts taken offline from downloaded packs
+    final local = await ref.watch(offlineTestingProvider).result(id);
+    if (local == null) throw const ApiException('Attempt not found', statusCode: 404);
+    return AttemptResult.fromJson(local);
+  }
+  return ref.watch(testingRepositoryProvider).result(id);
+});
 
 /// Test result: score, points, MMT estimate, achievements, review of mistakes, "Repeat mistakes".
 class ResultScreen extends ConsumerStatefulWidget {
@@ -63,6 +72,13 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             final review = _onlyMistakes ? r.review.where((i) => !i.isCorrect).toList() : r.review;
             return ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 32), children: [
               _ScoreHero(result: r),
+              if (r.pendingSync) ...[
+                const SizedBox(height: 12),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: const OfflineBanner(messageKey: 'result_pending_sync'),
+                ),
+              ],
               const SizedBox(height: 16),
               Row(children: [
                 Expanded(child: _Stat(label: s['earned'], value: r.score, icon: Icons.star_rounded, color: AppColors.gold)),

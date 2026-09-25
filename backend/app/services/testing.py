@@ -354,6 +354,16 @@ def submit_answer(
         raise _not_found("Question")
 
     value = validate_answer(question, selected_option_index, answer)
+    record = record_answer(db, user, attempt, question, value, utcnow())
+    db.commit()
+    db.refresh(record)
+    return record, question
+
+
+def record_answer(
+    db: Session, user: User, attempt: TestAttempt, question: Question, value: Any, answered_at: datetime
+) -> UserAnswer:
+    """Grade a validated answer and credit points (shared by online answers and /sync)."""
     official, is_correct = grade(question, value)
     base, bonus = g.points_for_answer(is_correct, attempt.answer_streak, official)
     attempt.answer_streak = attempt.answer_streak + 1 if is_correct else 0
@@ -365,7 +375,7 @@ def submit_answer(
         is_correct=is_correct,
         points=official,
         points_awarded=base + bonus,
-        answered_at=utcnow(),
+        answered_at=answered_at,
     )
     attempt.user_answers.append(record)
     if is_correct:
@@ -376,10 +386,8 @@ def submit_answer(
     if attempt.test_type not in EXAM_TYPES:
         g.add_points(db, user, attempt.role, base, PointsReason.CORRECT_ANSWER, attempt.id)
         g.add_points(db, user, attempt.role, bonus, PointsReason.STREAK_BONUS, attempt.id)
-    g.register_activity(user)
-    db.commit()
-    db.refresh(record)
-    return record, question
+    g.register_activity(user, answered_at)
+    return record
 
 
 def exam_breakdown(db: Session, attempt: TestAttempt) -> dict:
@@ -420,13 +428,15 @@ def exam_breakdown(db: Session, attempt: TestAttempt) -> dict:
     return {"subtests": result, "total": g.estimate_mmt_score(result), "max_total": g.MMT_MAX}
 
 
-def finish_attempt(db: Session, user: User, attempt: TestAttempt) -> dict:
+def finish_attempt(
+    db: Session, user: User, attempt: TestAttempt, finished_at: Optional[datetime] = None
+) -> dict:
     """Close the attempt (idempotent) and return points/achievements earned by finishing."""
     if attempt.status == AttemptStatus.FINISHED:
         return {"completion_bonus": 0, "achievements": []}
 
     attempt.status = AttemptStatus.FINISHED
-    attempt.finished_at = utcnow()
+    attempt.finished_at = finished_at or utcnow()
     attempt.total_count = len(attempt.question_ids)
 
     if attempt.test_type in EXAM_TYPES:

@@ -29,6 +29,7 @@ from app.models import (
     Topic,
     User,
 )
+from app.services import packs
 from app.services.stats import collect_stats
 
 
@@ -80,6 +81,12 @@ class ContentView(ModelView):
 
     def is_visible(self, request: Request) -> bool:
         return self.is_accessible(request)
+
+    async def after_model_change(self, data, model, is_created, request) -> None:
+        packs.invalidate()  # offline packs are rebuilt with the new content
+
+    async def after_model_delete(self, model, request) -> None:
+        packs.invalidate()
 
 
 class SuperadminView(ModelView):

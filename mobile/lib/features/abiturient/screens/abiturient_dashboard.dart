@@ -6,6 +6,7 @@ import '../../../core/widgets/common.dart';
 import '../../../data/models.dart';
 import '../../../data/repositories.dart';
 import '../../home/home_screen.dart';
+import '../../offline/downloads_screen.dart';
 
 final clusterScreenProvider = FutureProvider.autoDispose.family<ClusterScreenData, int>(
     (ref, clusterId) => ref.watch(contentRepositoryProvider).clusterScreen(clusterId));
@@ -39,6 +40,7 @@ class AbiturientDashboard extends ConsumerWidget {
             child: ListView(padding: const EdgeInsets.fromLTRB(20, 12, 20, 32), children: [
               if (data.fromCache) const Padding(padding: EdgeInsets.only(bottom: 12), child: OfflineBanner()),
               DashboardHeader(data: data, subtitle: data.clusterTitle ?? s['your_cluster']),
+              const OfflinePromoCard(),
               if (data.unfinished != null) ContinueTestCard(attempt: data.unfinished!),
               SectionTitle(s['subjects']),
               SubjectGrid(
