@@ -1,4 +1,5 @@
 from tests.conftest import auth_headers, cluster_id, register, subject_id
+from tests.fixtures import EXAM_TITLE
 
 
 def test_official_clusters_and_subtests(client):
@@ -28,7 +29,7 @@ def test_subjects_filter(client, db):
     assert [s["position"] for s in c1] == [1, 2, 3, 4]
 
 
-def test_subject_tree_with_theory_and_official_sections(client, db, abiturient):
+def test_subject_tree_with_theory_and_task_sections(client, db, abiturient):
     tree = client.get(f"/api/v1/subjects/{subject_id(db)}/topics", headers=abiturient).json()
     titles = [s["title"] for s in tree["sections"]]
     assert titles == [
@@ -36,9 +37,9 @@ def test_subject_tree_with_theory_and_official_sections(client, db, abiturient):
         "Задания повышенной сложности", "Задания с выбором ответа", "Задания на соответствие",
         "Задания открытого типа",
     ]
-    official = tree["sections"][4]
-    assert [t["title"] for t in official["topics"]] == ["Тема A", "Тема B"]
-    assert official["has_final_test"] is True
+    by_type = tree["sections"][4]
+    assert [t["title"] for t in by_type["topics"]] == ["Тема A", "Тема B"]
+    assert by_type["has_final_test"] is True
 
     topic = tree["sections"][0]["topics"][0]
     lessons = client.get(f"/api/v1/topics/{topic['id']}/lessons", headers=abiturient).json()
@@ -66,10 +67,10 @@ def test_content_language_follows_school_language(client, db):
     assert lessons[0]["language"] == "tj"
 
 
-def test_official_sample_exam(client, abiturient):
+def test_fixed_exam_test(client, abiturient):
     exams = client.get("/api/v1/exam-tests", headers=abiturient).json()
     assert len(exams) == 1
-    assert exams[0]["year"] == 2026 and exams[0]["title"].startswith("Официальный образец ЦВЭ-2026")
+    assert exams[0]["year"] == 2026 and exams[0]["title"] == EXAM_TITLE
     assert exams[0]["total_questions"] == 12 and exams[0]["duration_minutes"] == 220
     assert client.get("/api/v1/exam-tests?year=2020", headers=abiturient).json() == []
 

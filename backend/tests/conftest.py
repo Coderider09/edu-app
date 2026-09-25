@@ -20,7 +20,7 @@ from app.models import AdminRole, Cluster, Subject, User  # noqa: E402
 from app.seed import seed_achievements, seed_content  # noqa: E402
 from app.services import packs  # noqa: E402
 from app.services.cache import cache  # noqa: E402
-from tests.fixtures import small_bank  # noqa: E402
+from tests.fixtures import seed_small_bank  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
@@ -31,7 +31,8 @@ def database():
     packs.invalidate()
     with SessionLocal() as db:
         seed_achievements(db)
-        seed_content(db, bank=small_bank())
+        seed_content(db)
+        seed_small_bank(db)
         db.commit()
     yield
     Base.metadata.drop_all(bind=engine)

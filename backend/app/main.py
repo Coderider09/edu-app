@@ -53,7 +53,7 @@ app.include_router(admin.router, prefix=f"{API}/admin", tags=["admin"])
 
 setup_admin(app, engine)
 
-# Images of official tasks (formulas, figures) cropped from the ntc.tj collections
+# Static files (task and lesson images)
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 STATIC_DIR.mkdir(exist_ok=True)
 mimetypes.add_type("image/webp", ".webp")  # missing from the table of Python < 3.13

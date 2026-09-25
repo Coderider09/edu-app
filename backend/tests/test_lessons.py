@@ -41,7 +41,7 @@ def test_lessons_are_seeded_once(db):
     section = _section(db, "math")
     assert section is not None and section.title_tj == LESSONS_SECTION[1]
     before = db.scalar(select(func.count(Lesson.id)))
-    seed_content(db, bank={"questions": []})  # running the seed again adds nothing
+    seed_content(db)  # running the seed again adds nothing
     db.commit()
     assert db.scalar(select(func.count(Lesson.id))) == before
 

@@ -4,7 +4,7 @@ from sqlalchemy import func, select
 
 from app.models import Language, Question, Subject, Topic
 from app.seed import seed_content
-from app.seed_ntc import OWN_DIR, OWN_SECTION, OWN_SOURCE
+from app.seed_exam import OWN_DIR, OWN_SECTION, OWN_SOURCE
 from tests.conftest import subject_id
 from tools.own_bank.build import SOURCES, build_source
 
@@ -58,7 +58,7 @@ def test_own_tasks_are_seeded_once_with_solutions(client, db, abiturient):
     section = db.scalar(select(Topic).where(Topic.subject_id == math.id, Topic.title_ru == OWN_SECTION[0]))
     assert section is not None and len(section.child_topics) >= 10
 
-    seed_content(db, bank={"questions": []})  # running the seed again adds nothing
+    seed_content(db)  # running the seed again adds nothing
     db.commit()
     assert _own_count(db) == total
 

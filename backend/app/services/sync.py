@@ -72,7 +72,7 @@ def sync_attempt(db: Session, user: User, item: SyncAttempt, now: datetime) -> S
     if model is not None and (item.reference_id is None or db.get(model, item.reference_id) is None):
         return SyncAttemptResult(client_id=item.client_id, status="rejected", detail="Unknown reference")
 
-    # Only questions that are shipped in packs (fixed official samples stay online-only)
+    # Only questions that are shipped in packs (fixed exam tests stay online-only)
     ids = list(dict.fromkeys(item.question_ids))
     questions = {
         q.id: q

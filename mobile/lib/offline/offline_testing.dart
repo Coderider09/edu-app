@@ -9,7 +9,7 @@ import '../core/api/api_client.dart';
 import 'engine.dart';
 import 'pack_store.dart';
 
-/// Test types that can run from downloaded packs. Fixed official samples (exam_test) and
+/// Test types that can run from downloaded packs. Fixed exam tests (exam_test) and
 /// "Повторить ошибки" (needs the answer history on the server) stay online.
 const offlineTestTypes = {'topic_test', 'section_test', 'practice', 'lesson_check', 'mock_exam'};
 const _examTypes = {'mock_exam'};

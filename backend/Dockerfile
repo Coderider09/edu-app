@@ -10,7 +10,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY app/ ./app/
-# Official ЦВЭ task bank if it was built (tools/ntc_import.py); task images are in app/static/ntc
+# Own tasks (data/own) and lessons (data/lessons) loaded by `python -m app.seed`
 COPY data/ ./data/
 COPY alembic/ ./alembic/
 COPY alembic.ini docker-entrypoint.sh ./

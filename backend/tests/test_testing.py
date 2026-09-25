@@ -4,6 +4,7 @@ from sqlalchemy import select
 
 from app.models import ExamTest, PointsLedger, Question, QuestionType, Subject, TestAttempt, Topic
 from tests.conftest import auth_headers, cluster_id, register, subject_id
+from tests.fixtures import SOURCE
 
 
 def _topic(db, title="Линейные уравнения") -> Topic:
@@ -96,7 +97,7 @@ def test_unfinished_attempt_is_resumed(client, db, abiturient):
     assert state["answers"][0]["question_id"] == qid
 
 
-def test_official_sample_exam_hides_feedback_and_scales_to_500(client, db, abiturient):
+def test_fixed_exam_hides_feedback_and_scales_to_500(client, db, abiturient):
     exam = db.scalar(select(ExamTest))
     attempt = _start(client, abiturient, test_type="exam_test", reference_id=exam.id)
     assert attempt["shows_feedback"] is False and attempt["is_timed"] is True
@@ -157,17 +158,18 @@ def test_mock_exam_picks_literature_by_language(client, db):
     assert mock_subjects("ru") == ["tj_lang", "history", "ru_lang_lit", "english"]
 
 
-def _official_question(db, qtype, code="math"):
+def _typed_question(db, qtype, code="math"):
     return db.scalar(
         select(Question).join(Subject, Subject.id == Question.subject_id).where(
-            Subject.code == code, Question.question_type == QuestionType(qtype), Question.topic_id.is_not(None)
+            Subject.code == code, Question.question_type == QuestionType(qtype), Question.topic_id.is_not(None),
+            Question.source == SOURCE,
         )
     )
 
 
 def test_matching_and_numeric_answers(client, db, abiturient):
-    matching = _official_question(db, "matching")
-    numeric = _official_question(db, "numeric")
+    matching = _typed_question(db, "matching")
+    numeric = _typed_question(db, "numeric")
     attempt = _start(client, abiturient, test_type="topic_test", reference_id=matching.topic_id)
     q = next(x for x in attempt["questions"] if x["id"] == matching.id)
     assert q["question_type"] == "matching" and q["matching_left"] == ["l1", "l2", "l3", "l4"]

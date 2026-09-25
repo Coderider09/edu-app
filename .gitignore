@@ -111,13 +111,7 @@ flutter_export_environment.sh
 *.log
 logs/
 
-# Source PDFs of the National Testing Center (re-downloaded by tools/ntc_import.py)
-backend/data/ntc/
 backend/data/*.log
-# Official NTC task bank and task images: not published (distribution needs NTC permission).
-# Rebuild locally: cd backend && python -m tools.ntc_import
-backend/data/ntc_bank.json
-backend/app/static/ntc/
 
 # Built offline content packs (backend/app/services/packs.py)
 backend/data/packs/

@@ -24,6 +24,5 @@ README.md
 *.db
 *.sqlite3
 tests
-data/ntc/
 data/*.log
 tools

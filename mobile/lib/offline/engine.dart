@@ -324,34 +324,30 @@ List<int> selectPractice(SubjectPack pack, String lang, int? count, [Random? ran
 List<int> selectLessonCheck(SubjectPack pack, int lessonId) =>
     pack.questions.where((q) => q.lessonId == lessonId).map((q) => q.id).toList();
 
-/// Full ЦВЭ simulation: for each subtest the official number of tasks of each type (official tasks only).
+/// Full ЦВЭ simulation: for each subtest the official number of tasks of each type (exam tasks only),
+/// in the exam language when the subject has it, so a subtest never mixes translations.
 List<int> selectMockExam(ClusterStructure cluster, Map<int, SubjectPack> packs, String lang, [Random? random]) {
   random ??= Random();
   final ids = <int>[];
   for (final link in cluster.examSubtests(lang)) {
     final pack = packs[link.subjectId];
     if (pack == null) continue;
+    var inSubject = pack.questions.where((q) => q.subjectId == link.subjectId && q.inTopicPool).toList();
+    if (inSubject.any((q) => q.language == lang)) {
+      inSubject = inSubject.where((q) => q.language == lang).toList();
+    }
     final perType = <String, List<int>>{};
     var missing = 0;
     for (final type in const ['single', 'matching', 'numeric']) {
-      final pool = pack.questions
-          .where((q) => q.subjectId == link.subjectId && q.inTopicPool && q.type == type)
-          .map((q) => q.id)
-          .toList();
+      final pool = inSubject.where((q) => q.type == type).map((q) => q.id).toList();
       final need = pack.examStructure[type] ?? 0;
       final picked = _sample(pool, need, random);
       missing += need - picked.length;
       perType[type] = picked;
     }
     if (missing > 0) {
-      final pool = pack.questions
-          .where((q) =>
-              q.subjectId == link.subjectId &&
-              q.inTopicPool &&
-              q.type == 'single' &&
-              !perType['single']!.contains(q.id))
-          .map((q) => q.id)
-          .toList();
+      final pool =
+          inSubject.where((q) => q.type == 'single' && !perType['single']!.contains(q.id)).map((q) => q.id).toList();
       perType['single'] = [...perType['single']!, ..._sample(pool, missing, random)];
     }
     ids.addAll([...perType['single']!, ...perType['matching']!, ...perType['numeric']!]);

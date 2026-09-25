@@ -14,7 +14,7 @@ final clusterScreenProvider = FutureProvider.autoDispose.family<ClusterScreenDat
     (ref, clusterId) => ref.watch(contentRepositoryProvider).clusterScreen(clusterId));
 
 /// Abiturient home = the screen of the chosen ЦВЭ cluster: subtests A1–A4, the full mock ЦВЭ,
-/// official sample tests, mistakes, rating position.
+/// fixed exam tests, mistakes, rating position.
 class AbiturientDashboard extends ConsumerWidget {
   const AbiturientDashboard({super.key});
 
@@ -124,7 +124,7 @@ class _ExamCard extends ConsumerWidget {
   }
 }
 
-/// Full ЦВЭ simulation generated from the official task bank: 4 subtests, official task counts and time.
+/// Full ЦВЭ simulation generated from the app's own task bank: 4 subtests, official task counts and time.
 class _MockExamCard extends ConsumerWidget {
   final MockExamInfo info;
   const _MockExamCard({required this.info});

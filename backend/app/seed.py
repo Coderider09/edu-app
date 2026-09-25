@@ -1,11 +1,10 @@
-"""Initial data: official ЦВЭ structure and task bank, short theory, school demo content, achievements.
+"""Initial data: ЦВЭ structure, the app's own tasks and lessons, school demo content, achievements.
 
 Usage:  python -m app.seed      (idempotent — safe to run on every start)
 
-- 5 clusters / 11 subjects / subtests A1–A4 — from the official handbook of the National Testing
-  Center ("Справочник абитуриента-2026", see app/seed_ntc.py);
-- tasks — the official typical tasks of ЦВЭ-2026 with answer keys (data/ntc_bank.json, built by
-  `python -m tools.ntc_import`), plus the official sample ЦВЭ of every cluster;
+- 5 clusters / 11 subjects / subtests A1–A4 — the exam structure (see app/seed_exam.py);
+- tasks — the app's own tasks in the ЦВЭ format (data/own/*.json) and lessons with exercises
+  (data/lessons/*.json), all written by the EduApp team;
 - "Краткая теория" lessons and the school branch (grades 2–3) are demo content written for the app.
 """
 import sys
@@ -29,8 +28,8 @@ from app.models import (
     Topic,
     User,
 )
+from app.seed_exam import load_own_banks, seed_own_bank, seed_structure
 from app.seed_lessons import load_lesson_banks, seed_lessons
-from app.seed_ntc import load_bank, load_own_banks, seed_bank, seed_own_bank, seed_structure
 from app.services.gamification import ACHIEVEMENTS_SEED
 
 
@@ -544,8 +543,7 @@ def seed_superadmin(db: Session) -> None:
 
 
 def seed_content(
-    db: Session, bank_path: Optional[Path] = None, bank: Optional[dict] = None,
-    own_dir: Optional[Path] = None, lessons_dir: Optional[Path] = None,
+    db: Session, own_dir: Optional[Path] = None, lessons_dir: Optional[Path] = None,
 ) -> None:
     subjects = seed_structure(db)
 
@@ -562,11 +560,6 @@ def seed_content(
                                   order=order)
                 db.add(subject)
                 _add_sections(db, subject, sections)
-
-    bank = bank if bank is not None else load_bank(bank_path)
-    if bank:
-        count = seed_bank(db, subjects, bank)
-        print(f"Official ЦВЭ tasks loaded: {count}")
 
     count = seed_own_bank(db, subjects, load_own_banks(own_dir))
     if count:

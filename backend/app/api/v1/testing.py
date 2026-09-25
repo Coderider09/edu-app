@@ -28,8 +28,8 @@ def start_attempt(
     - `topic_test` — reference_id = topic id, optional `timed`
     - `section_test` — reference_id = section (root topic) id, final test of a section/quarter
     - `practice` — reference_id = subject id, untimed training with explanations
-    - `exam_test` — reference_id = fixed exam (official sample ЦВЭ); timed, feedback only after finishing
-    - `mock_exam` — reference_id = cluster id; a full ЦВЭ generated from the official task bank
+    - `exam_test` — reference_id = fixed exam test (created in the admin panel); timed, feedback only after finishing
+    - `mock_exam` — reference_id = cluster id; a full ЦВЭ generated from the app's own task bank
       (4 subtests with the official number of tasks of each type, official duration)
     - `lesson_check` — reference_id = lesson id
     - `mistakes` — "Повторить ошибки", no reference_id

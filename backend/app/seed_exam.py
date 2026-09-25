@@ -1,8 +1,8 @@
-"""Official ЦВЭ structure (National Testing Center, "Справочник абитуриента-2026") and the task bank.
+"""ЦВЭ exam structure (clusters, subjects, subtests) and the app's own task bank.
 
 Component A — exam after 11th grade: 4 subtests per cluster, Tajik language is always A1.
-Source: https://ntc.tj/ru/abiturientu/spravochnik-2026.html (sections 9, 10, 11, 14).
-Tasks: data/ntc_bank.json, built by `python -m tools.ntc_import` from the official typical tasks.
+The structure follows the public exam rules ("Справочник абитуриента-2026", sections 9, 10, 11, 14).
+Tasks: data/own/*.json, written by the EduApp team (built by `python -m tools.own_bank.build`).
 """
 import json
 import logging
@@ -16,7 +16,6 @@ from app.models import (
     Cluster,
     ClusterSubject,
     Difficulty,
-    ExamTest,
     Language,
     Question,
     QuestionType,
@@ -26,8 +25,7 @@ from app.models import (
 
 logger = logging.getLogger(__name__)
 
-BANK_PATH = Path(__file__).resolve().parent.parent / "data" / "ntc_bank.json"
-SOURCE_URL = "https://ntc.tj/ru/abiturientu/tipovye-testovye-zadaniya.html"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 HUMANITIES = {"single": 20, "matching": 4, "numeric": 2}  # 26 tasks, 40 points (table 11.2)
 SCIENCES = {"single": 18, "matching": 2, "numeric": 7}    # 27 tasks, 40 points
@@ -92,13 +90,6 @@ CLUSTERS = [
     },
 ]
 
-SECTION_TITLES = {
-    "single": ("Задания с выбором ответа", "Саволҳо бо интихоби ҷавоб"),
-    "matching": ("Задания на соответствие", "Саволҳо барои муайян кардани мувофиқат"),
-    "numeric": ("Задания открытого типа", "Саволҳои шакли кушода"),
-}
-
-
 def seed_structure(db: Session) -> dict[str, Subject]:
     """Create the 5 clusters and 11 subjects with their subtests (idempotent by code)."""
     subjects: dict[str, Subject] = {}
@@ -130,102 +121,8 @@ def seed_structure(db: Session) -> dict[str, Subject]:
     return subjects
 
 
-def _question(record: dict, subject: Subject, **links) -> Question:
-    qtype = QuestionType(record["type"])
-    title = subject.title_tj if record["language"] == "tj" else subject.title_ru
-    where = "образец субтеста" if record.get("sample") else f"№{record['number']}"
-    correct = record["correct"]
-    return Question(
-        question_type=qtype,
-        language=Language(record["language"]),
-        passage=record.get("passage"),
-        text=record.get("text") or "",
-        image_url=record.get("image"),
-        options=record.get("options") or [],
-        matching_left=record.get("left"),
-        correct_answer=correct,
-        correct_option_index=correct[0] if qtype == QuestionType.SINGLE else None,
-        difficulty=Difficulty.MEDIUM,
-        source=f"НЦТ · типовые задания ЦВЭ-2026 · {title} · {where}",
-        subject=subject,
-        order=record["number"],
-        **links,
-    )
-
-
-def load_bank(path: Optional[Path] = None) -> Optional[dict]:
-    path = path or BANK_PATH
-    if not path.is_file():
-        logger.warning("Task bank %s not found — run `python -m tools.ntc_import`", path)
-        return None
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def seed_bank(db: Session, subjects: dict[str, Subject], bank: dict) -> int:
-    """Topics and questions from the official collections + the official sample ЦВЭ of every cluster."""
-    records = bank.get("questions", [])
-    count = 0
-    samples: dict[str, list[dict]] = {}
-    for code, subject in subjects.items():
-        own = [r for r in records if r["subject"] == code]
-        if not own:
-            continue
-        has_bank = db.scalar(
-            select(Question.id).join(Topic).where(Topic.subject_id == subject.id, Question.source.like("НЦТ%"))
-        )
-        if has_bank:
-            continue  # already imported
-        samples[code] = sorted((r for r in own if r.get("sample")), key=lambda r: r["number"])
-        sections: dict[str, Topic] = {}
-        topics: dict[tuple[str, str], Topic] = {}
-        for order, qtype in enumerate(("single", "matching", "numeric"), start=1):
-            of_type = [r for r in own if r["type"] == qtype and not r.get("sample")]
-            if not of_type:
-                continue
-            title_ru, title_tj = SECTION_TITLES[qtype]
-            section = Topic(subject=subject, title_ru=title_ru, title_tj=title_tj, order=100 + order)
-            db.add(section)
-            sections[qtype] = section
-            for r in of_type:
-                key = (qtype, r["topic"])
-                topic = topics.get(key)
-                if topic is None:
-                    topic = Topic(subject=subject, parent_topic=section, title_ru=r["topic"], title_tj=r["topic"],
-                                  order=len([k for k in topics if k[0] == qtype]) + 1)
-                    db.add(topic)
-                    topics[key] = topic
-                db.add(_question(r, subject, topic=topic))
-                count += 1
-        db.flush()
-
-    # Official sample ЦВЭ-2026 per cluster (the "образец субтеста" of each subject)
-    for data in CLUSTERS:
-        cluster = db.scalar(select(Cluster).where(Cluster.code == data["code"]))
-        tracks = sorted({t for *_, t in data["subtests"] if t}) or [None]
-        for track in tracks:
-            chosen = [(code, pos) for code, pos, _, t in data["subtests"] if t in (None, track)]
-            if not all(samples.get(code) for code, _ in chosen):
-                continue
-            lang = Language(track or "ru")
-            suffix = {"tj": " · адабиёти тоҷик", "ru": " · русский язык и литература"}.get(track or "", "")
-            exam = ExamTest(
-                cluster=cluster, year=2026, language=lang, duration_minutes=cluster.duration_minutes,
-                title=f"Официальный образец ЦВЭ-2026{suffix}",
-            )
-            db.add(exam)
-            order = 0
-            for code, _pos in sorted(chosen, key=lambda c: c[1]):
-                for r in samples[code]:
-                    order += 1
-                    q = _question(r, subjects[code], exam_test=exam)
-                    q.order = order
-                    db.add(q)
-            db.flush()
-    return count
-
-
 # ------------------------------------------------------------------ the app's own tasks
-OWN_DIR = BANK_PATH.parent / "own"
+OWN_DIR = DATA_DIR / "own"
 OWN_SOURCE = "EduApp · авторские задания"
 OWN_SECTION = ("Задания повышенной сложности", "Супоришҳои мураккаб")
 

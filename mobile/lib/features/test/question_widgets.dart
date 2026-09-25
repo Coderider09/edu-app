@@ -34,7 +34,7 @@ Offset _centerOf(BuildContext context) {
 }
 
 /// Shared text (reading passage), the question text and its image (formulas, figures, tables
-/// from the official collection). The image opens full-screen with zoom.
+/// from the task bank). The image opens full-screen with zoom.
 class QuestionContent extends ConsumerWidget {
   final String? passage;
   final String text;

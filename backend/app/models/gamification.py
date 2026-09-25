@@ -14,7 +14,7 @@ class TestType(str, enum.Enum):
     TOPIC_TEST = "topic_test"        # 10–20 questions on one topic
     SECTION_TEST = "section_test"    # final test of a section/quarter (all child topics)
     PRACTICE = "practice"            # subject training: untimed, explanation after each answer
-    EXAM_TEST = "exam_test"          # fixed full test (official sample): timed, no feedback until finish
+    EXAM_TEST = "exam_test"          # fixed full test (admin-made): timed, no feedback until finish
     MOCK_EXAM = "mock_exam"          # full ЦВЭ simulation generated from the bank by the official structure
     LESSON_CHECK = "lesson_check"    # 3–5 questions at the end of a lesson
     MISTAKES = "mistakes"            # "Повторить ошибки": marked + recently wrong questions

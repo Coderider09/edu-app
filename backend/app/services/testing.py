@@ -186,21 +186,19 @@ def exam_subtests(db: Session, cluster: Cluster, lang: str) -> List[ClusterSubje
 def _mock_exam_questions(db: Session, cluster: Cluster, lang: str) -> List[int]:
     """Full ЦВЭ simulation: for every subtest the official number of tasks of each type.
 
-    Only official tasks (with subject_id set) are used — not the app's own theory questions.
+    Only exam tasks (with subject_id set) are used — not the app's own theory questions. Tasks are
+    taken in the exam language when the subject has them, so a subtest never mixes translations.
     """
     ids: List[int] = []
     for link in exam_subtests(db, cluster, lang):
         structure = link.subject.exam_structure or DEFAULT_STRUCTURE
+        in_subject = and_(Question.subject_id == link.subject_id, topic_pool())
+        if db.scalar(select(Question.id).where(in_subject, Question.language == Language(lang)).limit(1)):
+            in_subject = and_(in_subject, Question.language == Language(lang))
         missing = 0
         per_type: dict[str, List[int]] = {}
         for qtype in (QuestionType.SINGLE, QuestionType.MATCHING, QuestionType.NUMERIC):
-            pool = list(
-                db.scalars(
-                    select(Question.id).where(
-                        Question.subject_id == link.subject_id, topic_pool(), Question.question_type == qtype
-                    )
-                ).all()
-            )
+            pool = list(db.scalars(select(Question.id).where(in_subject, Question.question_type == qtype)).all())
             need = structure.get(qtype.value, 0)
             picked = _sample(pool, need)
             missing += need - len(picked)
@@ -209,8 +207,7 @@ def _mock_exam_questions(db: Session, cluster: Cluster, lang: str) -> List[int]:
             pool = list(
                 db.scalars(
                     select(Question.id).where(
-                        Question.subject_id == link.subject_id,
-                        topic_pool(),
+                        in_subject,
                         Question.question_type == QuestionType.SINGLE,
                         Question.id.not_in(per_type["single"]),
                     )

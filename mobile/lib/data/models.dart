@@ -601,7 +601,7 @@ class MockExamInfo {
       );
 }
 
-/// Cluster screen: subjects (subtests), the mock ЦВЭ and fixed exam tests (official samples).
+/// Cluster screen: subjects (subtests), the mock ЦВЭ and fixed exam tests.
 class ClusterScreenData {
   final Cluster cluster;
   final MockExamInfo? mockExam;

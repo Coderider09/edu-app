@@ -14,7 +14,7 @@ class AppConfig {
   /// OAuth "Web client ID" used as serverClientId so Google returns an ID token.
   static const String googleServerClientId = String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID');
 
-  /// Task images are served by the API as relative paths ("/static/ntc/...").
+  /// Task images are served by the API as relative paths ("/static/...").
   /// Images of downloaded packs are local files ("file://...").
   static String mediaUrl(String url) => url.startsWith('/') ? '$apiBaseUrl$url' : url;
 

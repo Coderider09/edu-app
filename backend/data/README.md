@@ -1,14 +1,10 @@
 # data/
 
-- `ntc_bank.json` — official typical tasks of ЦВЭ-2026 with answer keys (National Testing Center, ntc.tj).
-- `../app/static/ntc/` — images of tasks with formulas/figures cropped from the official PDFs.
+All task content here is written by the EduApp team:
 
-Both are **not stored in git**: redistributing NTC materials requires the Center's permission.
-Build them locally (downloads the PDFs from ntc.tj into `data/ntc/pdf/`, ~200 MB, ~20 min):
+- `own/<subject>_<language>.json` — own tasks in the ЦВЭ format with solutions, built from
+  `tools/own_bank/*.py` by `python -m tools.own_bank.build`;
+- `lessons/<subject>_<language>.json` — lessons with mini-checks and exercises, built from
+  `tools/lessons/*.py` by `python -m tools.lessons.build`.
 
-```bash
-cd backend
-pip install -r requirements-dev.txt
-python -m tools.ntc_import
-python -m app.seed
-```
+`python -m app.seed` loads both into the database (idempotent).

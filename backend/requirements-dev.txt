@@ -2,7 +2,3 @@
 pytest==9.1.1
 httpx==0.28.1
 ruff==0.16.8
-# tools/ntc_import.py (building the official task bank from ntc.tj PDFs)
-pdfplumber==0.11.10
-pypdf
-pillow

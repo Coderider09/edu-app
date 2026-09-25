@@ -170,7 +170,7 @@ class QuestionType(str, enum.Enum):
 
 
 class ExamTest(Base):
-    """Fixed full test of a cluster (official sample subtests / past-year papers)."""
+    """Fixed full test of a cluster (created in the admin panel)."""
 
     __tablename__ = "exam_tests"
 

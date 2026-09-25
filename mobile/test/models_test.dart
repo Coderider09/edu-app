@@ -61,7 +61,7 @@ void main() {
       'id': 7,
       'question_type': 'matching',
       'text': '',
-      'image_url': '/static/ntc/math/matching-0-3.webp',
+      'image_url': '/static/tasks/math/matching-0-3.webp',
       'options': ['1', '2', '3', '4', '5'],
       'matching_left': ['A', 'B', 'C', 'D'],
       'max_points': 4,

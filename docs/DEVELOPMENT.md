@@ -22,7 +22,7 @@ alembic check     # модели и миграции совпадают (вып�
 
 ### Контент
 
-- Данные: `python -m app.seed` (идемпотентно) — официальная структура ЦВЭ (`app/seed_ntc.py`), банк заданий НЦТ (`data/ntc_bank.json`), краткая теория, школьное демо. Суперадмин создаётся из `FIRST_SUPERADMIN_EMAIL` / `FIRST_SUPERADMIN_PASSWORD`.
+- Данные: `python -m app.seed` (идемпотентно) — структура ЦВЭ и собственные задания (`app/seed_exam.py`, `data/own/`), уроки (`data/lessons/`), краткая теория, школьное демо. Суперадмин создаётся из `FIRST_SUPERADMIN_EMAIL` / `FIRST_SUPERADMIN_PASSWORD`.
 - Контент-менеджера назначает суперадмин: «Пользователи» → поле `admin_role` = `content_manager`.
 - Вопросы трёх типов (`question_type`):
   - `single` — `options` (4 варианта), `correct_answer` = `[индекс]` (с нуля);
@@ -32,15 +32,6 @@ alembic check     # модели и миграции совпадают (вып�
   Для мини-проверки урока заполните `lesson_id`, для фиксированного теста ЦВЭ — `exam_test_id`. Чтобы вопрос попадал в «Пробный ЦВЭ», у него должен быть `subject_id`.
 - Субтесты кластеров (A1–A4, максимум баллов, язык для альтернатив) — «Субтесты кластеров» в админке.
 - Раздел/четверть — тема без родителя; темы внутри раздела — дочерние (`parent_topic`).
-
-### Обновление банка официальных заданий
-
-Когда НЦТ публикует новые типовые задания:
-
-1. Обновите имена файлов в `SUBJECT_FILES` (`tools/ntc_import.py`).
-2. Выполните `pip install -r requirements-dev.txt` и `python -m tools.ntc_import`: скрипт скачает PDF в `data/ntc/pdf/`, разберёт задания, сверит их с ключами и вырежет картинки.
-3. Проверьте в выводе строки `skip …`: это блоки, которые не совпали с ключом и были пропущены.
-4. Удалите старые задания (или используйте новую БД) и выполните `python -m app.seed`.
 
 ### Уроки и упражнения
 
@@ -68,7 +59,7 @@ alembic check     # модели и миграции совпадают (вып�
 
 ### Настройки игровой механики
 
-`app/services/gamification.py`: `BASE_POINTS`, `STREAK_THRESHOLD`, `STREAK_MULTIPLIER`, `COMPLETION_BONUS`, `LEVELS`, `TOPIC_PASS_ACCURACY`, пересчёт в 500 баллов (`scale_subtest`, `estimate_mmt_score`), достижения `ACHIEVEMENTS_SEED`. Максимум баллов по субтестам — в `app/seed_ntc.py` (`CLUSTERS`).
+`app/services/gamification.py`: `BASE_POINTS`, `STREAK_THRESHOLD`, `STREAK_MULTIPLIER`, `COMPLETION_BONUS`, `LEVELS`, `TOPIC_PASS_ACCURACY`, пересчёт в 500 баллов (`scale_subtest`, `estimate_mmt_score`), достижения `ACHIEVEMENTS_SEED`. Максимум баллов по субтестам — в `app/seed_exam.py` (`CLUSTERS`).
 
 ## Mobile
 
