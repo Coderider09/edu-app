@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/strings.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/ui/ui.dart';
 import '../../core/widgets/common.dart';
 import '../../data/models.dart';
 import '../../data/repositories.dart';
@@ -33,56 +34,74 @@ class SubjectScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(tree.valueOrNull?.subject.title ?? '')),
       body: AsyncBody<SubjectTree>(
         value: tree,
         onRetry: () => ref.invalidate(subjectTreeProvider(subjectId)),
-        builder: (data) => RefreshIndicator(
-          onRefresh: () async => ref.invalidate(subjectTreeProvider(subjectId)),
-          child: ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 32), children: [
-            _SubjectHeader(subject: data.subject),
-            const SizedBox(height: 12),
-            TapCard(
-              onTap: () => open(
-                  '/test/practice?ref=${data.subject.id}&title=${Uri.encodeComponent('${s['practice']}: ${data.subject.title}')}'),
-              child: Row(children: [
-                const Icon(Icons.fitness_center_rounded, size: 32),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(s['practice'], style: const TextStyle(fontWeight: FontWeight.w800)),
-                    Text(s['practice_desc'], style: Theme.of(context).textTheme.bodySmall),
-                  ]),
-                ),
-                const Icon(Icons.chevron_right_rounded),
-              ]),
-            ),
-            for (final section in data.sections) ...[
-              SectionTitle(
-                section.title,
-                trailing: Text('${section.progress.percent}%', style: const TextStyle(fontWeight: FontWeight.w700)),
-              ),
-              for (final topic in section.topics)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _TopicTile(topic: topic, onOpen: open),
-                ),
-              if (section.hasFinalTest)
-                TapCard(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  onTap: () => open('/test/section_test?ref=${section.id}&title=${Uri.encodeComponent(section.title)}'),
-                  child: Row(children: [
-                    const Icon(Icons.flag_rounded),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(s['section_final_test'], style: const TextStyle(fontWeight: FontWeight.w700)),
+        builder: (data) {
+          final color = parseHexColor(data.subject.color) ?? Theme.of(context).colorScheme.primary;
+          final colors = AppGradients.fromColor(color);
+          return RefreshIndicator(
+            onRefresh: () async => ref.invalidate(subjectTreeProvider(subjectId)),
+            edgeOffset: 120,
+            child: CustomScrollView(slivers: [
+              SliverToBoxAdapter(child: _SubjectHeader(subject: data.subject, colors: colors)),
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+                sliver: SliverList.list(children: [
+                  FadeSlideIn(
+                    child: AppCard(
+                      onTap: () => open('/test/practice?ref=${data.subject.id}'
+                          '&title=${Uri.encodeComponent('${s['practice']}: ${data.subject.title}')}'),
+                      child: Row(children: [
+                        IconBadge(Icons.fitness_center_rounded, colors: colors, size: 50),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text(s['practice'], style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
+                            Text(s['practice_desc'], style: TextStyle(color: mutedOf(context), fontSize: 13)),
+                          ]),
+                        ),
+                        Icon(Icons.arrow_forward_ios_rounded, size: 16, color: mutedOf(context)),
+                      ]),
                     ),
-                    const Icon(Icons.chevron_right_rounded),
-                  ]),
-                ),
-            ],
-          ]),
-        ),
+                  ),
+                  for (final section in data.sections) ...[
+                    SectionHeader(
+                      section.title,
+                      trailing: Pill('${section.progress.percent}%', color: colors.last),
+                    ),
+                    for (final (i, topic) in section.topics.indexed)
+                      FadeSlideIn(
+                        delay: Stagger.of(i, stepMs: 50),
+                        child: _TopicTile(
+                          topic: topic,
+                          colors: colors,
+                          first: i == 0,
+                          last: i == section.topics.length - 1 && !section.hasFinalTest,
+                          onOpen: open,
+                        ),
+                      ),
+                    if (section.hasFinalTest)
+                      AppCard(
+                        gradient: AppGradients.of(colors),
+                        shadowColor: colors.last,
+                        onTap: () => open('/test/section_test?ref=${section.id}&title=${Uri.encodeComponent(section.title)}'),
+                        child: Row(children: [
+                          const Icon(Icons.flag_rounded, color: Colors.white, size: 28),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(s['section_final_test'],
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+                          ),
+                          const Icon(Icons.play_circle_fill_rounded, color: Colors.white, size: 32),
+                        ]),
+                      ),
+                  ],
+                ]),
+              ),
+            ]),
+          );
+        },
       ),
     );
   }
@@ -90,99 +109,160 @@ class SubjectScreen extends ConsumerWidget {
 
 class _SubjectHeader extends StatelessWidget {
   final Subject subject;
-  const _SubjectHeader({required this.subject});
+  final List<Color> colors;
+  const _SubjectHeader({required this.subject, required this.colors});
 
   @override
   Widget build(BuildContext context) {
-    final color = parseHexColor(subject.color) ?? Theme.of(context).colorScheme.primary;
     final percent = subject.progressPercent ?? 0;
-    return Row(children: [
-      Hero(
-        tag: 'subject-${subject.id}',
-        child: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(color: color.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(16)),
-          child: Icon(subjectIcon(subject.icon), color: color, size: 32),
+    return AuroraBackground(
+      colors: colors,
+      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(36)),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 20, 26),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            GlassIconButton(icon: Icons.arrow_back_rounded, onPressed: () => Navigator.of(context).maybePop()),
+            const SizedBox(height: 16),
+            Row(children: [
+              const SizedBox(width: 4),
+              Hero(
+                tag: 'subject-${subject.id}',
+                child: Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.22),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
+                  ),
+                  child: Icon(subjectIcon(subject.icon), color: Colors.white, size: 40),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(subject.title,
+                    style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, height: 1.15)),
+              ),
+              ProgressRing(
+                value: percent / 100,
+                size: 72,
+                stroke: 8,
+                colors: const [Color(0xFFFFE08A), Colors.white],
+                track: Colors.white.withValues(alpha: 0.25),
+                child: Text('$percent%',
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 17)),
+              ),
+            ]),
+          ]),
         ),
       ),
-      const SizedBox(width: 16),
-      Expanded(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('$percent%', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
-          const SizedBox(height: 6),
-          AnimatedProgressBar(value: percent / 100, color: color),
-        ]),
-      ),
-    ]);
+    );
   }
 }
 
+/// A topic as a stop on a vertical path: ring with progress, connecting line, lessons and test info.
 class _TopicTile extends ConsumerWidget {
   final Topic topic;
+  final List<Color> colors;
+  final bool first;
+  final bool last;
   final Future<void> Function(String location) onOpen;
-  const _TopicTile({required this.topic, required this.onOpen});
+  const _TopicTile({
+    required this.topic,
+    required this.colors,
+    required this.first,
+    required this.last,
+    required this.onOpen,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = topic.progress;
-    final scheme = Theme.of(context).colorScheme;
-    return TapCard(
-      onTap: () => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        showDragHandle: true,
-        builder: (_) => _TopicSheet(topic: topic, onOpen: onOpen),
-      ),
-      child: Row(children: [
+    final line = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1);
+    return IntrinsicHeight(
+      child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         SizedBox(
-          width: 44,
-          height: 44,
+          width: 56,
           child: Stack(alignment: Alignment.center, children: [
-            TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0, end: p.percent / 100),
-              duration: const Duration(milliseconds: 800),
-              builder: (context, v, _) => CircularProgressIndicator(
-                value: v,
-                strokeWidth: 4,
-                backgroundColor: scheme.surfaceContainerHighest,
-                color: p.passed ? AppColors.correct : scheme.primary,
+            Column(children: [
+              Expanded(child: Container(width: 3, color: first ? Colors.transparent : line)),
+              Expanded(child: Container(width: 3, color: last ? Colors.transparent : line)),
+            ]),
+            ProgressRing(
+              value: p.percent / 100,
+              size: 48,
+              stroke: 5,
+              colors: p.passed ? AppGradients.mint : colors,
+              child: Container(
+                width: 34,
+                height: 34,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: p.passed ? AppGradients.of(AppGradients.mint) : null,
+                  color: p.passed ? null : surfaceOf(context),
+                ),
+                child: p.passed
+                    ? const Icon(Icons.check_rounded, color: Colors.white, size: 20)
+                    : Text('${p.percent}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900)),
               ),
             ),
-            if (p.passed)
-              const Icon(Icons.check_rounded, color: AppColors.correct, size: 22)
-            else
-              Text('${p.percent}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
           ]),
         ),
-        const SizedBox(width: 14),
+        const SizedBox(width: 8),
         Expanded(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(topic.title, style: const TextStyle(fontWeight: FontWeight.w700)),
-            const SizedBox(height: 4),
-            Row(children: [
-              if (p.lessonsTotal > 0) ...[
-                Icon(Icons.menu_book_rounded, size: 14, color: scheme.outline),
-                Text(' ${p.lessonsCompleted}/${p.lessonsTotal}   ', style: Theme.of(context).textTheme.bodySmall),
-              ],
-              if (p.questionsCount > 0) ...[
-                Icon(Icons.quiz_rounded, size: 14, color: scheme.outline),
-                Text(' ${p.bestAccuracy != null ? '${p.bestAccuracy}%' : p.questionsCount}',
-                    style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ]),
-          ]),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: AppCard(
+              padding: const EdgeInsets.all(14),
+              onTap: () => showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (_) => _TopicSheet(topic: topic, colors: colors, onOpen: onOpen),
+              ),
+              child: Row(children: [
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(topic.title, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                    const SizedBox(height: 6),
+                    Wrap(spacing: 8, runSpacing: 4, children: [
+                      if (p.lessonsTotal > 0)
+                        _Meta(Icons.menu_book_rounded, '${p.lessonsCompleted}/${p.lessonsTotal}'),
+                      if (p.questionsCount > 0)
+                        _Meta(Icons.quiz_rounded, p.bestAccuracy != null ? '${p.bestAccuracy}%' : '${p.questionsCount}'),
+                    ]),
+                  ]),
+                ),
+                Icon(Icons.arrow_forward_ios_rounded, size: 15, color: mutedOf(context)),
+              ]),
+            ),
+          ),
         ),
-        const Icon(Icons.chevron_right_rounded),
       ]),
     );
   }
 }
 
+class _Meta extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  const _Meta(this.icon, this.text);
+
+  @override
+  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
+        Icon(icon, size: 14, color: mutedOf(context)),
+        const SizedBox(width: 4),
+        Text(text, style: TextStyle(color: mutedOf(context), fontSize: 12.5, fontWeight: FontWeight.w700)),
+      ]);
+}
+
 class _TopicSheet extends ConsumerWidget {
   final Topic topic;
+  final List<Color> colors;
   final Future<void> Function(String location) onOpen;
-  const _TopicSheet({required this.topic, required this.onOpen});
+  const _TopicSheet({required this.topic, required this.colors, required this.onOpen});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -197,27 +277,35 @@ class _TopicSheet extends ConsumerWidget {
 
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.6,
-      maxChildSize: 0.9,
-      builder: (context, controller) => ListView(controller: controller, padding: const EdgeInsets.all(20), children: [
-        Text(topic.title, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
-        SectionTitle(s['lessons']),
+      initialChildSize: 0.62,
+      maxChildSize: 0.92,
+      builder: (context, controller) => ListView(controller: controller, padding: const EdgeInsets.fromLTRB(20, 0, 20, 28), children: [
+        Row(children: [
+          IconBadge(Icons.auto_stories_rounded, colors: colors, size: 48),
+          const SizedBox(width: 14),
+          Expanded(child: Text(topic.title, style: Theme.of(context).textTheme.titleLarge)),
+        ]),
+        SectionHeader(s['lessons']),
         lessons.when(
-          loading: () => const Skeleton(height: 64),
+          loading: () => const Skeleton(height: 72, radius: 20),
           error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(topicLessonsProvider(topic.id))),
           data: (list) => Column(children: [
-            for (final lesson in list)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: TapCard(
-                  onTap: () => go('/lesson/${lesson.id}'),
-                  child: Row(children: [
-                    Icon(lesson.completed ? Icons.check_circle_rounded : Icons.play_lesson_rounded,
-                        color: lesson.completed ? AppColors.correct : Theme.of(context).colorScheme.primary),
-                    const SizedBox(width: 12),
-                    Expanded(child: Text(lesson.title, style: const TextStyle(fontWeight: FontWeight.w600))),
-                    const Icon(Icons.chevron_right_rounded),
-                  ]),
+            for (final (i, lesson) in list.indexed)
+              FadeSlideIn(
+                delay: Stagger.of(i),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: AppCard(
+                    padding: const EdgeInsets.all(14),
+                    onTap: () => go('/lesson/${lesson.id}'),
+                    child: Row(children: [
+                      IconBadge(lesson.completed ? Icons.check_rounded : Icons.play_arrow_rounded,
+                          colors: lesson.completed ? AppGradients.mint : colors, size: 40, glow: false),
+                      const SizedBox(width: 12),
+                      Expanded(child: Text(lesson.title, style: const TextStyle(fontWeight: FontWeight.w700))),
+                      Icon(Icons.arrow_forward_ios_rounded, size: 15, color: mutedOf(context)),
+                    ]),
+                  ),
                 ),
               ),
           ]),
@@ -225,19 +313,25 @@ class _TopicSheet extends ConsumerWidget {
         tests.maybeWhen(
           data: (list) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             for (final test in list) ...[
-              SectionTitle(s['topic_test']),
-              Text(s.f('questions_n', {'n': test.defaultQuestionCount}) +
-                  (test.bestAccuracy != null ? ' · ${s.f('best_result', {'n': test.bestAccuracy!})}' : '')),
-              const SizedBox(height: 12),
-              FilledButton.icon(
-                icon: const Icon(Icons.play_arrow_rounded),
-                label: Text(s['without_timer']),
+              SectionHeader(
+                s['topic_test'],
+                subtitle: s.f('questions_n', {'n': test.defaultQuestionCount}),
+                trailing: test.bestAccuracy != null
+                    ? Pill(s.f('best_result', {'n': test.bestAccuracy!}), icon: Icons.emoji_events_rounded,
+                        color: AppColors.gold)
+                    : null,
+              ),
+              GradientButton(
+                label: s['without_timer'],
+                icon: Icons.play_arrow_rounded,
+                colors: colors,
                 onPressed: () => go('/test/topic_test?ref=${test.topicId}&title=${Uri.encodeComponent(test.title)}'),
               ),
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                icon: const Icon(Icons.timer_outlined),
-                label: Text(s['with_timer']),
+              const SizedBox(height: 10),
+              SoftButton(
+                label: s['with_timer'],
+                icon: Icons.timer_outlined,
+                color: colors.last,
                 onPressed: () =>
                     go('/test/topic_test?ref=${test.topicId}&timed=1&title=${Uri.encodeComponent(test.title)}'),
               ),

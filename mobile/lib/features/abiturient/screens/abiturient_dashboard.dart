@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/strings.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/ui/ui.dart';
 import '../../../core/widgets/common.dart';
 import '../../../data/models.dart';
 import '../../../data/repositories.dart';
@@ -31,34 +33,39 @@ class AbiturientDashboard extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: AsyncBody<Dashboard>(
           value: dashboard,
           onRetry: refresh,
           loading: const DashboardSkeleton(),
           builder: (data) => RefreshIndicator(
             onRefresh: refresh,
-            child: ListView(padding: const EdgeInsets.fromLTRB(20, 12, 20, 32), children: [
+            child: ListView(padding: Gap.page.copyWith(top: 12), children: [
               if (data.fromCache) const Padding(padding: EdgeInsets.only(bottom: 12), child: OfflineBanner()),
-              DashboardHeader(data: data, subtitle: data.clusterTitle ?? s['your_cluster']),
-              const OfflinePromoCard(),
+              FadeSlideIn(child: DashboardHeader(data: data, subtitle: data.clusterTitle ?? s['your_cluster'])),
+              QuickActions(abiturient: true, clusterId: data.clusterId),
               if (data.unfinished != null) ContinueTestCard(attempt: data.unfinished!),
-              SectionTitle(s['subjects']),
+              const OfflinePromoCard(),
+              SectionHeader(s['subjects']),
               SubjectGrid(
                 subjects: data.subjects,
                 onOpen: (subject) => openAndRefresh(context, ref, '/subject/${subject.id}'),
               ),
-              SectionTitle(s['exam_prep']),
+              SectionHeader(s['exam_prep']),
               if (cluster != null)
                 cluster.when(
-                  loading: () => const Skeleton(height: 140, radius: 20),
+                  loading: () => const Skeleton(height: 180, radius: 28),
                   error: (e, _) => const SizedBox.shrink(),
                   data: (c) => Column(children: [
-                    if (c.mockExam != null) _MockExamCard(info: c.mockExam!),
-                    for (final exam in c.examTests)
-                      Padding(padding: const EdgeInsets.only(top: 10), child: _ExamCard(exam: exam)),
+                    if (c.mockExam != null) FadeSlideIn(child: _MockExamCard(info: c.mockExam!)),
+                    for (final (i, exam) in c.examTests.indexed)
+                      FadeSlideIn(
+                        delay: Stagger.of(i + 1),
+                        child: Padding(padding: const EdgeInsets.only(top: 12), child: _ExamCard(exam: exam)),
+                      ),
                   ]),
                 ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               const MistakesCard(),
             ]),
           ),
@@ -75,8 +82,8 @@ class _ExamCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final scheme = Theme.of(context).colorScheme;
-    return TapCard(
+    final palette = BranchPalette.of(ref.watch(branchProvider));
+    return AppCard(
       onTap: () => openAndRefresh(
           context, ref, '/test/exam_test?ref=${exam.id}&title=${Uri.encodeComponent(exam.title)}'),
       child: Row(children: [
@@ -85,8 +92,9 @@ class _ExamCard extends ConsumerWidget {
           height: 64,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [scheme.primary, scheme.secondary]),
-            borderRadius: BorderRadius.circular(16),
+            gradient: AppGradients.of(palette.gradient),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [BoxShadow(color: palette.primary.withValues(alpha: 0.35), blurRadius: 14, offset: const Offset(0, 6))],
           ),
           child: Text('${exam.year}',
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
@@ -94,16 +102,23 @@ class _ExamCard extends ConsumerWidget {
         const SizedBox(width: 14),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(exam.title, style: const TextStyle(fontWeight: FontWeight.w800)),
+            Text(exam.title, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
             const SizedBox(height: 4),
-            Text(s.f('exam_minutes', {'n': exam.durationMinutes, 'q': exam.totalQuestions}),
-                style: Theme.of(context).textTheme.bodySmall),
-            if (exam.bestMmtScore != null)
-              Text(s.f('best_mmt', {'n': exam.bestMmtScore!}),
-                  style: TextStyle(color: scheme.primary, fontWeight: FontWeight.w700, fontSize: 13)),
+            Row(children: [
+              Icon(Icons.timer_outlined, size: 15, color: mutedOf(context)),
+              const SizedBox(width: 4),
+              Flexible(
+                child: Text(s.f('exam_minutes', {'n': exam.durationMinutes, 'q': exam.totalQuestions}),
+                    style: TextStyle(color: mutedOf(context), fontSize: 13)),
+              ),
+            ]),
+            if (exam.bestMmtScore != null) ...[
+              const SizedBox(height: 6),
+              Pill(s.f('best_mmt', {'n': exam.bestMmtScore!}), icon: Icons.emoji_events_rounded, color: AppColors.gold),
+            ],
           ]),
         ),
-        Icon(Icons.timer_outlined, color: scheme.primary),
+        Icon(Icons.arrow_forward_ios_rounded, size: 16, color: mutedOf(context)),
       ]),
     );
   }
@@ -117,43 +132,54 @@ class _MockExamCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final scheme = Theme.of(context).colorScheme;
-    return Material(
-      borderRadius: BorderRadius.circular(20),
-      clipBehavior: Clip.antiAlias,
-      child: Ink(
-        decoration: BoxDecoration(gradient: LinearGradient(colors: [scheme.primary, scheme.secondary])),
-        child: InkWell(
-          onTap: () => openAndRefresh(
-              context, ref, '/test/mock_exam?ref=${info.clusterId}&title=${Uri.encodeComponent(s['mock_exam'])}'),
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(children: [
-                const Icon(Icons.assignment_rounded, color: Colors.white, size: 30),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(s['mock_exam'],
-                      style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w900)),
-                ),
-                const Icon(Icons.play_circle_fill_rounded, color: Colors.white, size: 34),
-              ]),
-              const SizedBox(height: 6),
-              Text(
-                s.f('mock_exam_desc', {'q': info.questions, 'min': info.durationMinutes, 'max': info.maxScore}),
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.9)),
-              ),
-              const SizedBox(height: 10),
-              Wrap(spacing: 6, runSpacing: 6, children: [
-                for (final st in info.subtests)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(10)),
-                    child: Text('A${st.position} ${st.title} · ${st.maxScore}',
-                        style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+    const colors = [Color(0xFF0F172A), Color(0xFF4338CA)];
+    final radius = BorderRadius.circular(Radii.xl);
+    return Pressable(
+      onTap: () => openAndRefresh(
+          context, ref, '/test/mock_exam?ref=${info.clusterId}&title=${Uri.encodeComponent(s['mock_exam'])}'),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: radius,
+          boxShadow: [BoxShadow(color: colors.last.withValues(alpha: 0.4), blurRadius: 26, offset: const Offset(0, 12))],
+        ),
+        child: AuroraBackground(
+          colors: colors,
+          borderRadius: radius,
+          child: Shine(
+            borderRadius: radius,
+            period: const Duration(milliseconds: 5000),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Row(children: [
+                  const IconBadge(Icons.assignment_rounded, colors: AppGradients.violet, size: 48),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(s['mock_exam'],
+                        style: const TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w900)),
                   ),
+                  Pulse(
+                    amplitude: 0.08,
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                      child: Icon(Icons.play_arrow_rounded, color: colors.last, size: 32),
+                    ),
+                  ),
+                ]),
+                const SizedBox(height: 12),
+                Text(
+                  s.f('mock_exam_desc', {'q': info.questions, 'min': info.durationMinutes, 'max': info.maxScore}),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), height: 1.4),
+                ),
+                const SizedBox(height: 14),
+                Wrap(spacing: 8, runSpacing: 8, children: [
+                  for (final st in info.subtests)
+                    Pill('A${st.position} · ${st.title} · ${st.maxScore}', onDark: true),
+                ]),
               ]),
-            ]),
+            ),
           ),
         ),
       ),

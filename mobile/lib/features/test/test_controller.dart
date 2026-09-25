@@ -171,7 +171,7 @@ class TestController extends AutoDisposeFamilyNotifier<TestState, TestLaunch> {
       }
       raw = Map<String, dynamic>.from(jsonDecode(saved));
     }
-    _show(Attempt.fromJson(raw!));
+    _show(Attempt.fromJson(raw));
   }
 
   void _show(Attempt attempt) {

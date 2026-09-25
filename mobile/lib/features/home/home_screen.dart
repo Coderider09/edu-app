@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/l10n/strings.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/ui/ui.dart';
 import '../../core/widgets/common.dart';
 import '../../data/models.dart';
 import '../../data/repositories.dart';
@@ -37,7 +38,7 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-/// Greeting card with avatar, points, level progress and daily streak.
+/// Greeting card: living gradient, avatar in the level ring, burning streak, points counting up.
 class DashboardHeader extends ConsumerWidget {
   final Dashboard data;
   final String subtitle;
@@ -49,82 +50,174 @@ class DashboardHeader extends ConsumerWidget {
     final p = data.profile;
     final palette = BranchPalette.of(ref.watch(branchProvider));
     final next = p.level.nextCode;
+    final white70 = Colors.white.withValues(alpha: 0.85);
     return Container(
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: LinearGradient(colors: palette.gradient, begin: Alignment.topLeft, end: Alignment.bottomRight),
-        boxShadow: [BoxShadow(color: palette.primary.withValues(alpha: 0.3), blurRadius: 24, offset: const Offset(0, 8))],
+        borderRadius: BorderRadius.circular(Radii.xl),
+        boxShadow: [BoxShadow(color: palette.primary.withValues(alpha: 0.35), blurRadius: 30, offset: const Offset(0, 12))],
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          AvatarCircle(p.avatarId, size: 52),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(s.f('hello', {'name': p.name}),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800)),
-              Text(subtitle, style: TextStyle(color: Colors.white.withValues(alpha: 0.85))),
+      child: AuroraBackground(
+        colors: palette.gradient,
+        borderRadius: BorderRadius.circular(Radii.xl),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
+              Pressable(
+                onTap: () => context.go('/profile'),
+                child: Hero(
+                  tag: 'avatar-home', // the profile tab (same route) uses 'avatar'
+                  child: RingAvatar(
+                    avatarId: p.avatarId,
+                    progress: p.level.progress,
+                    size: 60,
+                    colors: const [Color(0xFFFFE08A), Colors.white],
+                    track: Colors.white.withValues(alpha: 0.25),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(s.f('hello', {'name': p.name}),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w900)),
+                  Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: white70)),
+                ]),
+              ),
+              const SizedBox(width: 8),
+              _StreakBadge(days: p.currentStreak),
             ]),
-          ),
-          _StreakBadge(days: p.currentStreak),
-        ]),
-        const SizedBox(height: 20),
-        Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-          CountUp(p.totalPoints,
-              style: const TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w900)),
-          const SizedBox(width: 6),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(s['points'], style: TextStyle(color: Colors.white.withValues(alpha: 0.85))),
-          ),
-          const Spacer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(20)),
-            child: Text('${s['level']} ${p.level.number} · ${s.level(p.level.code)}',
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
-          ),
-        ]),
-        const SizedBox(height: 10),
-        AnimatedProgressBar(value: p.level.progress, color: Colors.white, height: 8),
-        const SizedBox(height: 6),
-        Text(
-          next == null
-              ? s['max_level']
-              : s.f('to_next_level', {'level': s.level(next), 'n': (p.level.nextLevelPoints ?? 0) - p.totalPoints}),
-          style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13),
+            const SizedBox(height: 22),
+            Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              CountUp(p.totalPoints,
+                  style: const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.w900, height: 1)),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(s['points'], style: TextStyle(color: white70, fontWeight: FontWeight.w700)),
+              ),
+              const Spacer(),
+              if (data.rank != null) Pill('#${data.rank}', icon: Icons.emoji_events_rounded, onDark: true),
+            ]),
+            const SizedBox(height: 14),
+            GradientBar(
+              value: p.level.progress,
+              colors: const [Color(0xFFFFE08A), Colors.white],
+              track: Colors.white.withValues(alpha: 0.22),
+              height: 10,
+            ),
+            const SizedBox(height: 8),
+            Row(children: [
+              const Icon(Icons.workspace_premium_rounded, color: Colors.white, size: 16),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text('${s['level']} ${p.level.number} · ${s.level(p.level.code)}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.white, fontSize: 13.5, fontWeight: FontWeight.w800)),
+              ),
+            ]),
+            const SizedBox(height: 2),
+            Text(
+              next == null
+                  ? s['max_level']
+                  : s.f('to_next_level', {'level': s.level(next), 'n': (p.level.nextLevelPoints ?? 0) - p.totalPoints}),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: white70, fontSize: 12.5),
+            ),
+          ]),
         ),
-        if (data.rank != null) ...[
-          const SizedBox(height: 4),
-          Text(s.f('rank_n', {'n': data.rank!}),
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13)),
-        ],
+      ),
+    );
+  }
+}
+
+class _StreakBadge extends ConsumerWidget {
+  final int days;
+  const _StreakBadge({required this.days});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return Tooltip(
+      message: days > 0 ? s['keep_streak'] : s['start_streak'],
+      triggerMode: TooltipTriggerMode.tap,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(8, 6, 12, 6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.12), blurRadius: 10)],
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          Pulse(
+            enabled: days > 0,
+            amplitude: 0.16,
+            period: const Duration(milliseconds: 900),
+            child: ShaderMask(
+              shaderCallback: (r) => AppGradients.of(days > 0 ? AppGradients.fire : AppGradients.silver,
+                  begin: Alignment.bottomCenter, end: Alignment.topCenter).createShader(r),
+              child: const Icon(Icons.local_fire_department_rounded, color: Colors.white, size: 24),
+            ),
+          ),
+          const SizedBox(width: 2),
+          Text('$days', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 17, color: Color(0xFF1E2230))),
+        ]),
+      ),
+    );
+  }
+}
+
+/// Round shortcuts under the header.
+class QuickActions extends ConsumerWidget {
+  final bool abiturient;
+  final int? clusterId;
+  const QuickActions({super.key, required this.abiturient, this.clusterId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final actions = [
+      if (abiturient && clusterId != null)
+        (Icons.assignment_rounded, AppGradients.violet, s['qa_mock'],
+            () => openAndRefresh(context, ref, '/test/mock_exam?ref=$clusterId&title=${Uri.encodeComponent(s['mock_exam'])}')),
+      (Icons.replay_rounded, AppGradients.rose, s['qa_mistakes'],
+          () => openAndRefresh(context, ref, '/test/mistakes?title=${Uri.encodeComponent(s['repeat_mistakes'])}')),
+      (Icons.leaderboard_rounded, AppGradients.gold, s['qa_rating'], () => context.go('/rating')),
+      (Icons.download_for_offline_rounded, AppGradients.mint, s['qa_offline'], () => context.push('/downloads')),
+      if (!abiturient) (Icons.settings_rounded, AppGradients.sky, s['qa_settings'], () => context.push('/settings')),
+    ];
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Row(children: [
+        for (final (i, (icon, colors, label, onTap)) in actions.indexed)
+          Expanded(
+            child: FadeSlideIn(
+              delay: Stagger.of(i, stepMs: 70, startMs: 150),
+              scale: true,
+              child: Pressable(
+                onTap: onTap,
+                pressedScale: 0.9,
+                child: Column(children: [
+                  IconBadge(icon, colors: colors, size: 56),
+                  const SizedBox(height: 8),
+                  Text(label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700)),
+                ]),
+              ),
+            ),
+          ),
       ]),
     );
   }
 }
 
-class _StreakBadge extends StatelessWidget {
-  final int days;
-  const _StreakBadge({required this.days});
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(Icons.local_fire_department_rounded,
-              color: days > 0 ? AppColors.streak : Colors.grey, size: 22),
-          const SizedBox(width: 2),
-          Text('$days', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Colors.black87)),
-        ]),
-      );
-}
-
-/// Card of a subject with its progress.
+/// Card of a subject: gradient icon, progress ring, subtest label.
 class SubjectCard extends ConsumerWidget {
   final Subject subject;
   final VoidCallback onTap;
@@ -132,28 +225,35 @@ class SubjectCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final color = parseHexColor(subject.color) ?? Theme.of(context).colorScheme.primary;
+    final colors = AppGradients.fromColor(color);
     final percent = subject.progressPercent ?? 0;
-    return TapCard(
+    return AppCard(
       onTap: onTap,
+      padding: const EdgeInsets.all(16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(color: color.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(14)),
-          child: Icon(subjectIcon(subject.icon), color: color, size: 28),
-        ),
+        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Hero(tag: 'subject-${subject.id}', child: IconBadge(subjectIcon(subject.icon), colors: colors, size: 50)),
+          const Spacer(),
+          ProgressRing(
+            value: percent / 100,
+            size: 44,
+            stroke: 5,
+            colors: colors,
+            child: Text('$percent', style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w900)),
+          ),
+        ]),
         const Spacer(),
+        if (subject.position != null) ...[
+          Text(s.f('subtest_n', {'n': subject.position!}),
+              style: TextStyle(color: colors.last, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+          const SizedBox(height: 2),
+        ],
         Text(subject.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
-        const SizedBox(height: 8),
-        Row(children: [
-          Expanded(child: AnimatedProgressBar(value: percent / 100, color: color, height: 6)),
-          const SizedBox(width: 8),
-          Text('$percent%', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
-        ]),
+            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, height: 1.2)),
       ]),
     );
   }
@@ -167,26 +267,23 @@ class SubjectGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GridView.builder(
         shrinkWrap: true,
+        padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.05,
+          mainAxisSpacing: 14,
+          crossAxisSpacing: 14,
+          childAspectRatio: 1.02,
         ),
         itemCount: subjects.length,
-        itemBuilder: (context, i) => TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0, end: 1),
-          duration: Duration(milliseconds: 350 + 80 * i),
-          curve: Curves.easeOutCubic,
-          builder: (context, v, child) =>
-              Opacity(opacity: v, child: Transform.translate(offset: Offset(0, 24 * (1 - v)), child: child)),
+        itemBuilder: (context, i) => FadeSlideIn(
+          delay: Stagger.of(i, stepMs: 80, startMs: 200),
           child: SubjectCard(subject: subjects[i], onTap: () => onOpen(subjects[i])),
         ),
       );
 }
 
-/// "Continue test" card for an unfinished attempt.
+/// "Continue test" card for an unfinished attempt: progress and a pulsing play button.
 class ContinueTestCard extends ConsumerWidget {
   final AttemptBrief attempt;
   const ContinueTestCard({super.key, required this.attempt});
@@ -194,30 +291,49 @@ class ContinueTestCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final scheme = Theme.of(context).colorScheme;
+    final palette = BranchPalette.of(ref.watch(branchProvider));
     final total = attempt.totalCount == 0 ? 1 : attempt.totalCount;
     return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: TapCard(
-        color: scheme.primaryContainer,
-        onTap: () => openAndRefresh(
-          context,
-          ref,
-          '/test/${attempt.testType}?${attempt.referenceId != null ? 'ref=${attempt.referenceId}&' : ''}'
-          'title=${Uri.encodeComponent(attempt.title)}',
-        ),
-        child: Row(children: [
-          Icon(Icons.play_circle_fill_rounded, size: 44, color: scheme.primary),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(s['continue_test'], style: const TextStyle(fontWeight: FontWeight.w800)),
-              Text(attempt.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-              const SizedBox(height: 6),
-              AnimatedProgressBar(value: attempt.answeredCount / total, height: 6),
-            ]),
+      padding: const EdgeInsets.only(top: 20),
+      child: FadeSlideIn(
+        delay: const Duration(milliseconds: 250),
+        child: AppCard(
+          shadowColor: palette.primary,
+          onTap: () => openAndRefresh(
+            context,
+            ref,
+            '/test/${attempt.testType}?${attempt.referenceId != null ? 'ref=${attempt.referenceId}&' : ''}'
+            'title=${Uri.encodeComponent(attempt.title)}',
           ),
-        ]),
+          child: Row(children: [
+            Pulse(
+              amplitude: 0.07,
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: AppGradients.of(palette.gradient),
+                  boxShadow: [BoxShadow(color: palette.primary.withValues(alpha: 0.45), blurRadius: 16)],
+                ),
+                child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 34),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(s['continue_test'], style: TextStyle(color: palette.primary, fontWeight: FontWeight.w900, fontSize: 13)),
+                Text(attempt.title,
+                    maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
+                const SizedBox(height: 8),
+                GradientBar(value: attempt.answeredCount / total, colors: palette.gradient, height: 7),
+                const SizedBox(height: 4),
+                Text(s.f('answered_of', {'a': attempt.answeredCount, 't': attempt.totalCount}),
+                    style: TextStyle(color: mutedOf(context), fontSize: 12)),
+              ]),
+            ),
+          ]),
+        ),
       ),
     );
   }
@@ -229,26 +345,18 @@ class MistakesCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    return TapCard(
+    return AppCard(
       onTap: () => openAndRefresh(context, ref, '/test/mistakes?title=${Uri.encodeComponent(s['repeat_mistakes'])}'),
       child: Row(children: [
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.wrong.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: const Icon(Icons.replay_rounded, color: AppColors.wrong),
-        ),
-        const SizedBox(width: 12),
+        const IconBadge(Icons.replay_rounded, colors: AppGradients.rose, size: 48),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(s['repeat_mistakes'], style: const TextStyle(fontWeight: FontWeight.w800)),
-            Text(s['repeat_mistakes_desc'], style: Theme.of(context).textTheme.bodySmall),
+            Text(s['repeat_mistakes'], style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
+            Text(s['repeat_mistakes_desc'], style: TextStyle(color: mutedOf(context), fontSize: 13)),
           ]),
         ),
-        const Icon(Icons.chevron_right_rounded),
+        Icon(Icons.arrow_forward_ios_rounded, size: 16, color: mutedOf(context)),
       ]),
     );
   }
@@ -263,17 +371,25 @@ class DashboardSkeleton extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         physics: const NeverScrollableScrollPhysics(),
         children: const [
-          Skeleton(height: 190, radius: 24),
+          Skeleton(height: 210, radius: 32),
+          SizedBox(height: 24),
+          Row(children: [
+            Expanded(child: Skeleton(height: 76, radius: 20)),
+            SizedBox(width: 12),
+            Expanded(child: Skeleton(height: 76, radius: 20)),
+            SizedBox(width: 12),
+            Expanded(child: Skeleton(height: 76, radius: 20)),
+            SizedBox(width: 12),
+            Expanded(child: Skeleton(height: 76, radius: 20)),
+          ]),
           SizedBox(height: 28),
           Skeleton(height: 24, width: 160),
-          SizedBox(height: 12),
+          SizedBox(height: 14),
           Row(children: [
-            Expanded(child: Skeleton(height: 150, radius: 16)),
-            SizedBox(width: 12),
-            Expanded(child: Skeleton(height: 150, radius: 16)),
+            Expanded(child: Skeleton(height: 160, radius: 24)),
+            SizedBox(width: 14),
+            Expanded(child: Skeleton(height: 160, radius: 24)),
           ]),
-          SizedBox(height: 12),
-          Skeleton(height: 80, radius: 16),
         ],
       );
 }

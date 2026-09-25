@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/l10n/strings.dart';
 import '../../core/motion.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/ui/ui.dart';
 import '../../core/widgets/common.dart';
 import '../../core/widgets/markdown_view.dart';
 import '../../data/models.dart';
@@ -101,7 +102,9 @@ class _TestScreenState extends ConsumerState<TestScreen> {
       await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          content: Text(s['finish_confirm']),
+          icon: const IconBadge(Icons.flag_rounded, colors: AppGradients.violet, size: 56),
+          content: Text(s['finish_confirm'], textAlign: TextAlign.center),
+          actionsAlignment: MainAxisAlignment.center,
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: Text(s['cancel'])),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(s['finish'])),
@@ -135,7 +138,9 @@ class _TestScreenState extends ConsumerState<TestScreen> {
       return Scaffold(
         appBar: AppBar(),
         body: nothing
-            ? Center(child: Text(s['nothing_to_repeat'], style: Theme.of(context).textTheme.titleMedium))
+            ? Center(
+                child: EmptyState(
+                    icon: Icons.celebration_rounded, text: s['nothing_to_repeat'], colors: AppGradients.mint))
             : ErrorView(error: e, onRetry: controller.load),
       );
     }
@@ -214,30 +219,50 @@ class _TestScreenState extends ConsumerState<TestScreen> {
         actions: [
           if (state.remaining != null) _TimerChip(remaining: state.remaining!),
           if (state.showsFeedback) ...[
-            if (state.streak >= 3)
-              Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Row(children: [
-                  const Icon(Icons.local_fire_department_rounded, color: AppColors.streak),
-                  Text('${state.streak}', style: const TextStyle(fontWeight: FontWeight.w900)),
-                ]),
-              ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, a) => ScaleTransition(scale: a, child: child),
+              child: state.streak >= 3
+                  ? Padding(
+                      key: const ValueKey('streak'),
+                      padding: const EdgeInsets.only(right: 6),
+                      child: Pulse(
+                        amplitude: 0.12,
+                        period: const Duration(milliseconds: 800),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                          decoration: BoxDecoration(
+                            gradient: AppGradients.of(AppGradients.fire),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(children: [
+                            const Icon(Icons.local_fire_department_rounded, color: Colors.white, size: 18),
+                            Text('${state.streak}',
+                                style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+                          ]),
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
             Container(
               key: _scoreKey,
               margin: const EdgeInsets.only(right: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: AppColors.gold.withValues(alpha: 0.18),
+                gradient: AppGradients.of(AppGradients.gold),
                 borderRadius: BorderRadius.circular(20),
+                boxShadow: [BoxShadow(color: AppColors.gold.withValues(alpha: 0.35), blurRadius: 10)],
               ),
               child: Row(children: [
-                const Icon(Icons.star_rounded, color: AppColors.gold, size: 20),
+                const Icon(Icons.star_rounded, color: Colors.white, size: 18),
                 const SizedBox(width: 2),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
                   transitionBuilder: (child, a) => ScaleTransition(scale: a, child: child),
                   child: Text('${state.score}',
-                      key: ValueKey(state.score), style: const TextStyle(fontWeight: FontWeight.w900)),
+                      key: ValueKey(state.score),
+                      style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
                 ),
               ]),
             ),
@@ -248,23 +273,31 @@ class _TestScreenState extends ConsumerState<TestScreen> {
         Column(children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: AnimatedProgressBar(value: state.answers.length / total, height: 10),
+            child: GradientBar(
+              value: state.answers.length / total,
+              colors: BranchPalette.of(ref.watch(branchProvider)).gradient,
+              height: 10,
+            ),
           ),
           _QuestionStrip(state: state, onTap: controller.goTo),
           Expanded(
             child: ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 24), children: [
               Row(children: [
-                Text(s.f('question_n_of', {'n': state.index + 1, 'total': total}),
-                    style: Theme.of(context).textTheme.labelLarge),
-                const SizedBox(width: 8),
-                _TypeBadge(question: q),
-                const Spacer(),
-                TextButton.icon(
-                  onPressed: controller.toggleMark,
-                  icon: Icon(state.marked.contains(q.id) ? Icons.bookmark_rounded : Icons.bookmark_border_rounded),
-                  label: Text(state.marked.contains(q.id) ? s['marked'] : s['mark_question']),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(s.f('question_n_of', {'n': state.index + 1, 'total': total}),
+                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15)),
+                    const SizedBox(height: 6),
+                    _TypeBadge(question: q),
+                  ]),
+                ),
+                _MarkButton(
+                  marked: state.marked.contains(q.id),
+                  label: state.marked.contains(q.id) ? s['marked'] : s['mark_question'],
+                  onTap: controller.toggleMark,
                 ),
               ]),
+              const SizedBox(height: 10),
               AnimatedSwitcher(
                 duration: motion(ref, 300, context: context),
                 transitionBuilder: (child, a) => FadeTransition(
@@ -278,13 +311,15 @@ class _TestScreenState extends ConsumerState<TestScreen> {
                   key: ValueKey(q.id),
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    QuestionContent(
-                      passage: q.passage,
-                      text: q.text,
-                      imageUrl: q.imageUrl,
-                      source: q.source,
+                    AppCard(
+                      child: QuestionContent(
+                        passage: q.passage,
+                        text: q.text,
+                        imageUrl: q.imageUrl,
+                        source: q.source,
+                      ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
                     Shake(trigger: _shakeTick, child: input),
                     if (answer != null && state.showsFeedback) FeedbackPanel(question: q, answer: answer),
                   ],
@@ -299,26 +334,31 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               child: Row(children: [
                 if (!lastQuestion && answer != null && state.showsFeedback)
                   Expanded(
-                    child: FilledButton(onPressed: controller.next, child: Text(s['next_question'])),
+                    child: FadeSlideIn(
+                      offset: const Offset(0, 16),
+                      child: GradientButton(
+                        label: s['next_question'],
+                        icon: Icons.arrow_forward_rounded,
+                        onPressed: controller.next,
+                      ),
+                    ),
                   ),
                 if (lastQuestion || !state.showsFeedback) ...[
                   if (!lastQuestion && !state.showsFeedback) ...[
                     Expanded(
-                      child: OutlinedButton(onPressed: controller.next, child: Text(s['skip'])),
+                      child: SoftButton(label: s['skip'], height: 56, onPressed: controller.next),
                     ),
                     const SizedBox(width: 12),
                   ],
                   Expanded(
-                    child: FilledButton(
-                      onPressed: state.finishing
-                          ? null
-                          : () async {
-                              if (!lastQuestion && !await _confirmFinish(s)) return;
-                              controller.finish();
-                            },
-                      child: state.finishing
-                          ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 3))
-                          : Text(s['finish_test']),
+                    child: GradientButton(
+                      label: s['finish_test'],
+                      icon: Icons.flag_rounded,
+                      loading: state.finishing,
+                      onPressed: () async {
+                        if (!lastQuestion && !await _confirmFinish(s)) return;
+                        controller.finish();
+                      },
                     ),
                   ),
                 ],
@@ -359,14 +399,12 @@ class _TypeBadge extends ConsumerWidget {
       QuestionType.matching => s['type_matching'],
       QuestionType.numeric => s['type_numeric'],
     };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text('$label · ${question.maxPoints} ${s['pts_short']}', style: const TextStyle(fontSize: 11)),
-    );
+    final icon = switch (question.type) {
+      QuestionType.single => Icons.radio_button_checked_rounded,
+      QuestionType.matching => Icons.compare_arrows_rounded,
+      QuestionType.numeric => Icons.pin_rounded,
+    };
+    return Pill('$label · ${question.maxPoints} ${s['pts_short']}', icon: icon);
   }
 }
 
@@ -380,13 +418,15 @@ class _TimerChip extends StatelessWidget {
     final h = remaining.inHours;
     final m = remaining.inMinutes.remainder(60).toString().padLeft(2, '0');
     final sec = remaining.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return AnimatedContainer(
+    final chip = AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.only(right: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: (urgent ? AppColors.wrong : Theme.of(context).colorScheme.primary).withValues(alpha: 0.15),
+        color: (urgent ? AppColors.wrong : Theme.of(context).colorScheme.primary).withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+            color: (urgent ? AppColors.wrong : Theme.of(context).colorScheme.primary).withValues(alpha: 0.3)),
       ),
       child: Row(children: [
         Icon(Icons.timer_outlined, size: 18, color: urgent ? AppColors.wrong : null),
@@ -398,6 +438,41 @@ class _TimerChip extends StatelessWidget {
               color: urgent ? AppColors.wrong : null,
             )),
       ]),
+    );
+    return urgent ? Pulse(amplitude: 0.06, period: const Duration(milliseconds: 600), child: chip) : chip;
+  }
+}
+
+/// Bookmark toggle: the icon pops when a question is marked for review.
+class _MarkButton extends StatelessWidget {
+  final bool marked;
+  final String label;
+  final VoidCallback onTap;
+  const _MarkButton({required this.marked, required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = marked ? AppColors.gold : mutedOf(context);
+    return Tooltip(
+      message: label,
+      child: Pressable(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          padding: const EdgeInsets.all(9),
+          decoration: BoxDecoration(
+            color: marked ? AppColors.gold.withValues(alpha: 0.16) : mutedOf(context).withValues(alpha: 0.08),
+            shape: BoxShape.circle,
+          ),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, a) =>
+                ScaleTransition(scale: CurvedAnimation(parent: a, curve: Curves.elasticOut), child: child),
+            child: Icon(marked ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
+                key: ValueKey(marked), color: color, size: 22),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -420,27 +495,29 @@ class _QuestionStrip extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 6),
         itemBuilder: (context, i) {
           final a = state.answers[state.questions[i].id];
-          final Color bg;
+          final List<Color>? gradient;
           if (a == null) {
-            bg = scheme.surfaceContainerHighest;
+            gradient = null;
           } else if (a.isCorrect == true) {
-            bg = AppColors.correct;
+            gradient = AppGradients.mint;
           } else if (a.isCorrect == false) {
-            bg = (a.points ?? 0) > 0 ? AppColors.gold : AppColors.wrong;
+            gradient = (a.points ?? 0) > 0 ? AppGradients.gold : AppGradients.rose;
           } else {
-            bg = scheme.primary;
+            gradient = [scheme.primary, scheme.secondary];
           }
           final current = i == state.index;
           return GestureDetector(
             onTap: () => onTap(i),
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: 32,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutBack,
+              width: current ? 38 : 32,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: bg,
-                shape: BoxShape.circle,
-                border: current ? Border.all(color: scheme.onSurface, width: 2) : null,
+                gradient: gradient != null ? AppGradients.of(gradient) : null,
+                color: gradient == null ? scheme.onSurface.withValues(alpha: 0.07) : null,
+                borderRadius: BorderRadius.circular(16),
+                border: current ? Border.all(color: scheme.primary, width: 2.5) : null,
               ),
               child: Text('${i + 1}',
                   style: TextStyle(
@@ -487,18 +564,19 @@ class FeedbackPanel extends ConsumerWidget {
       builder: (context, v, child) =>
           Opacity(opacity: v, child: Transform.translate(offset: Offset(0, 20 * (1 - v)), child: child)),
       child: Container(
-        margin: const EdgeInsets.only(top: 8),
+        margin: const EdgeInsets.only(top: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.4)),
+          color: color.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(Radii.lg),
+          border: Border.all(color: color.withValues(alpha: 0.35), width: 1.5),
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            Icon(ok ? Icons.check_circle_rounded : Icons.info_rounded, color: color),
-            const SizedBox(width: 8),
-            Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 17)),
+            IconBadge(ok ? Icons.check_rounded : (partial ? Icons.more_horiz_rounded : Icons.close_rounded),
+                colors: ok ? AppGradients.mint : (partial ? AppGradients.gold : AppGradients.rose), size: 36),
+            const SizedBox(width: 10),
+            Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 18)),
             const Spacer(),
             if (answer.points != null)
               Text('${answer.points}/${question.maxPoints} ${s['pts_short']}',
@@ -514,7 +592,11 @@ class FeedbackPanel extends ConsumerWidget {
           ],
           if (answer.explanation != null && answer.explanation!.isNotEmpty) ...[
             const SizedBox(height: 10),
-            Text(s['explanation'], style: const TextStyle(fontWeight: FontWeight.w700)),
+            Row(children: [
+              const Icon(Icons.lightbulb_rounded, color: AppColors.gold, size: 18),
+              const SizedBox(width: 6),
+              Text(s['explanation'], style: const TextStyle(fontWeight: FontWeight.w800)),
+            ]),
             const SizedBox(height: 4),
             MarkdownView(answer.explanation!),
           ],

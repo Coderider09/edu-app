@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/l10n/strings.dart';
+import '../../../core/ui/ui.dart';
+import '../auth_scaffold.dart';
 import '../google_sign_in_button.dart';
 import '../session_controller.dart';
 
@@ -53,68 +55,45 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    return Scaffold(
-      body: SafeArea(
-        child: Form(
-          key: _form,
-          child: ListView(padding: const EdgeInsets.all(24), children: [
-            const SizedBox(height: 32),
-            Icon(Icons.school_rounded, size: 64, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 16),
-            Text(s['login'],
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900)),
-            const SizedBox(height: 32),
-            TextFormField(
-              controller: _login,
-              keyboardType: TextInputType.emailAddress,
-              autofillHints: const [AutofillHints.email, AutofillHints.telephoneNumber],
-              decoration: InputDecoration(labelText: s['email_or_phone'], prefixIcon: const Icon(Icons.person_rounded)),
-              validator: (v) => (v == null || v.trim().isEmpty) ? s['err_required'] : null,
+    return Form(
+      key: _form,
+      child: AuthScaffold(
+        title: s['welcome_back'],
+        subtitle: s['login_subtitle'],
+        footer: AuthSwitchLink(text: s['no_account'], onTap: () => context.go('/register')),
+        children: [
+          TextFormField(
+            controller: _login,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.email, AutofillHints.telephoneNumber],
+            decoration: InputDecoration(labelText: s['email_or_phone'], prefixIcon: const Icon(Icons.person_rounded)),
+            validator: (v) => (v == null || v.trim().isEmpty) ? s['err_required'] : null,
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _password,
+            obscureText: _obscure,
+            autofillHints: const [AutofillHints.password],
+            decoration: InputDecoration(
+              labelText: s['password'],
+              prefixIcon: const Icon(Icons.lock_rounded),
+              suffixIcon: ObscureToggle(obscure: _obscure, onTap: () => setState(() => _obscure = !_obscure)),
             ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _password,
-              obscureText: _obscure,
-              autofillHints: const [AutofillHints.password],
-              decoration: InputDecoration(
-                labelText: s['password'],
-                prefixIcon: const Icon(Icons.lock_rounded),
-                suffixIcon: IconButton(
-                  icon: Icon(_obscure ? Icons.visibility_rounded : Icons.visibility_off_rounded),
-                  onPressed: () => setState(() => _obscure = !_obscure),
-                ),
-              ),
-              validator: (v) => (v == null || v.isEmpty) ? s['err_required'] : null,
-              onFieldSubmitted: (_) => _submit(),
-            ),
-            AnimatedSize(
-              duration: const Duration(milliseconds: 200),
-              child: _error == null
-                  ? const SizedBox(height: 24)
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                    ),
-            ),
-            FilledButton(
-              onPressed: _busy ? null : _submit,
-              child: _busy
-                  ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 3))
-                  : Text(s['login']),
-            ),
-            const SizedBox(height: 16),
-            Row(children: [
-              const Expanded(child: Divider()),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text(s['or'])),
-              const Expanded(child: Divider()),
-            ]),
-            const SizedBox(height: 16),
-            const GoogleSignInButton(),
-            const SizedBox(height: 16),
-            TextButton(onPressed: () => context.go('/register'), child: Text(s['no_account'])),
-          ]),
-        ),
+            validator: (v) => (v == null || v.isEmpty) ? s['err_required'] : null,
+            onFieldSubmitted: (_) => _submit(),
+          ),
+          FormError(_error),
+          GradientButton(
+            label: s['login'],
+            icon: Icons.login_rounded,
+            loading: _busy,
+            colors: brandGradient.take(2).toList(),
+            onPressed: _submit,
+          ),
+          OrDivider(s['or']),
+          const GoogleSignInButton(),
+        ],
       ),
     );
   }

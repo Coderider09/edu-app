@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../config/app_config.dart';
 import '../../core/l10n/strings.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/ui/ui.dart';
 import '../../core/widgets/markdown_view.dart';
 import '../../data/models.dart';
 
@@ -47,19 +48,23 @@ class QuestionContent extends ConsumerWidget {
     final scheme = Theme.of(context).colorScheme;
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       if (passage != null && passage!.isNotEmpty)
-        Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            shape: const Border(),
-            leading: const Icon(Icons.article_outlined),
-            title: Text(s['passage'], style: const TextStyle(fontWeight: FontWeight.w700)),
-            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            children: [MarkdownView(passage!)],
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: AppCard(
+            padding: EdgeInsets.zero,
+            child: ExpansionTile(
+              initiallyExpanded: true,
+              shape: const Border(),
+              collapsedShape: const Border(),
+              leading: const IconBadge(Icons.article_rounded, colors: AppGradients.sky, size: 36, glow: false),
+              title: Text(s['passage'], style: const TextStyle(fontWeight: FontWeight.w800)),
+              childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              children: [MarkdownView(passage!)],
+            ),
           ),
         ),
       if (imageUrl != null)
-        GestureDetector(
+        Pressable(
           onTap: () => showDialog<void>(
             context: context,
             builder: (_) => Dialog.fullscreen(
@@ -77,8 +82,9 @@ class QuestionContent extends ConsumerWidget {
             margin: const EdgeInsets.only(bottom: 12),
             decoration: BoxDecoration(
               color: Colors.white, // the scans are black on white also in the dark theme
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(Radii.md),
               border: Border.all(color: scheme.outlineVariant),
+              boxShadow: softShadow(context),
             ),
             clipBehavior: Clip.antiAlias,
             child: Stack(children: [
@@ -94,7 +100,15 @@ class QuestionContent extends ConsumerWidget {
                   child: Center(child: Text(s['image_offline'], textAlign: TextAlign.center)),
                 ),
               ),
-              const Positioned(right: 6, bottom: 6, child: Icon(Icons.zoom_in_rounded, color: Colors.black45)),
+              Positioned(
+                right: 8,
+                bottom: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
+                  child: const Icon(Icons.zoom_in_rounded, color: Colors.white, size: 18),
+                ),
+              ),
             ]),
           ),
         )
@@ -103,14 +117,14 @@ class QuestionContent extends ConsumerWidget {
       if (source != null)
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
-          child: Text(source!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: scheme.outline)),
+          child: Text(source!, style: TextStyle(color: mutedOf(context), fontSize: 12)),
         ),
     ]);
   }
 }
 
 /// One option of a single-choice task (A–D). [text] is empty when the options are in the image.
-class OptionTile extends StatelessWidget {
+class OptionTile extends ConsumerWidget {
   final int index;
   final String text;
   final AnswerFeedback? answer;
@@ -126,63 +140,72 @@ class OptionTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final palette = BranchPalette.of(ref.watch(branchProvider));
     final selected = answer?.selectedIndex == index;
     final isCorrectOption = answer?.correctIndex == index;
-    Color border = scheme.outlineVariant;
+    Color border = Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.6);
     Color? fill;
+    List<Color>? badge;
     IconData? icon;
     if (answer != null) {
       if (isCorrectOption) {
         border = AppColors.correct;
-        fill = AppColors.correct.withValues(alpha: 0.12);
-        icon = Icons.check_circle_rounded;
+        fill = AppColors.correct.withValues(alpha: 0.1);
+        badge = AppGradients.mint;
+        icon = Icons.check_rounded;
       } else if (selected && answer!.isCorrect == false) {
         border = AppColors.wrong;
-        fill = AppColors.wrong.withValues(alpha: 0.12);
-        icon = Icons.cancel_rounded;
+        fill = AppColors.wrong.withValues(alpha: 0.1);
+        badge = AppGradients.rose;
+        icon = Icons.close_rounded;
       } else if (selected) {
-        border = scheme.primary;
-        fill = scheme.primaryContainer.withValues(alpha: 0.6);
-        icon = answer!.pending ? Icons.schedule_rounded : Icons.radio_button_checked_rounded;
+        border = palette.primary;
+        fill = palette.primary.withValues(alpha: 0.08);
+        badge = palette.gradient;
+        icon = answer!.pending ? Icons.schedule_rounded : null;
       }
     }
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      decoration: BoxDecoration(
-        color: fill ?? Theme.of(context).cardTheme.color,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: border, width: answer != null && (selected || isCorrectOption) ? 2 : 1),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTapUp: disabled ? null : (d) => onTap(d.globalPosition),
-          onTap: disabled ? null : () {},
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-            child: Row(children: [
-              Container(
-                width: 32,
-                height: 32,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(color: scheme.surfaceContainerHighest, shape: BoxShape.circle),
-                child: Text(_letters[index], style: const TextStyle(fontWeight: FontWeight.w800)),
-              ),
-              const SizedBox(width: 12),
-              Expanded(child: Text(text, style: const TextStyle(fontSize: 16))),
-              if (icon != null)
-                TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0, end: 1),
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.elasticOut,
-                  builder: (context, v, child) => Transform.scale(scale: v, child: child),
-                  child: Icon(icon, color: border),
-                ),
-            ]),
+    final highlighted = badge != null;
+    return Builder(
+      builder: (tileContext) => Pressable(
+        onTap: disabled ? null : () => onTap(_centerOf(tileContext)),
+        pressedScale: 0.97,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            color: fill ?? surfaceOf(context),
+            borderRadius: BorderRadius.circular(Radii.md),
+            border: Border.all(color: border, width: highlighted ? 2 : 1.2),
+            boxShadow: highlighted ? null : softShadow(context, strength: 0.6),
           ),
+          child: Row(children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 280),
+              width: 36,
+              height: 36,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: badge != null ? AppGradients.of(badge) : null,
+                color: badge == null ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.06) : null,
+              ),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, a) =>
+                    ScaleTransition(scale: CurvedAnimation(parent: a, curve: Curves.elasticOut), child: child),
+                child: icon != null
+                    ? Icon(icon, key: ValueKey(icon), color: Colors.white, size: 20)
+                    : Text(_letters[index],
+                        key: ValueKey('l$index$highlighted'),
+                        style: TextStyle(fontWeight: FontWeight.w900, color: highlighted ? Colors.white : null)),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(child: Text(text, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
+          ]),
         ),
       ),
     );
@@ -220,58 +243,67 @@ class _MatchingInputState extends ConsumerState<MatchingInput> {
     final s = ref.watch(stringsProvider);
     final q = widget.question;
     final correct = widget.answer?.correctMatching;
-    final scheme = Theme.of(context).colorScheme;
+    final palette = BranchPalette.of(ref.watch(branchProvider));
     final complete = _pairs.every((p) => p != null);
 
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       if (_textual) ...[
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              for (var i = 0; i < q.options.length; i++)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 3),
-                  child: Text('${i + 1}) ${q.options[i]}'),
-                ),
-            ]),
-          ),
+        AppCard(
+          padding: const EdgeInsets.all(14),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            for (var i = 0; i < q.options.length; i++)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: palette.primary.withValues(alpha: 0.12)),
+                    child: Text('${i + 1}',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: palette.primary)),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(child: Text(q.options[i])),
+                ]),
+              ),
+          ]),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
       ],
       for (var row = 0; row < _left.length; row++)
         Padding(
           padding: const EdgeInsets.only(bottom: 10),
-          child: Container(
-            padding: const EdgeInsets.all(10),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 280),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
+              color: surfaceOf(context),
+              borderRadius: BorderRadius.circular(Radii.md),
               border: Border.all(
                 color: correct == null
-                    ? scheme.outlineVariant
+                    ? Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.6)
                     : (_pairs[row] == correct[row] ? AppColors.correct : AppColors.wrong),
-                width: correct == null ? 1 : 2,
+                width: correct == null ? 1.2 : 2,
               ),
             ),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(_textual ? '${_letters[row]}) ${_left[row]}' : _letters[row],
-                  style: const TextStyle(fontWeight: FontWeight.w700)),
-              const SizedBox(height: 8),
-              Wrap(spacing: 6, runSpacing: 6, children: [
+                  style: const TextStyle(fontWeight: FontWeight.w800)),
+              const SizedBox(height: 10),
+              Row(children: [
                 for (var opt = 0; opt < q.options.length; opt++)
-                  ChoiceChip(
-                    label: Text('${opt + 1}'),
-                    selected: _pairs[row] == opt,
-                    selectedColor: correct != null && correct[row] == opt ? AppColors.correct.withValues(alpha: 0.3) : null,
-                    avatar: correct != null && correct[row] == opt
-                        ? const Icon(Icons.check_rounded, size: 16, color: AppColors.correct)
-                        : null,
-                    onSelected: widget.disabled
-                        ? null
-                        : (_) {
-                            HapticFeedback.selectionClick();
-                            setState(() => _pairs[row] = opt);
-                          },
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: _NumberChip(
+                      number: opt + 1,
+                      selected: _pairs[row] == opt,
+                      correct: correct != null && correct[row] == opt,
+                      colors: palette.gradient,
+                      onTap: widget.disabled
+                          ? null
+                          : () => setState(() => _pairs[row] = opt),
+                    ),
                   ),
               ]),
             ]),
@@ -279,19 +311,63 @@ class _MatchingInputState extends ConsumerState<MatchingInput> {
         ),
       if (widget.answer == null)
         Builder(
-          builder: (buttonContext) => FilledButton.icon(
+          builder: (buttonContext) => GradientButton(
+            label: s['answer_button'],
+            icon: Icons.check_rounded,
             onPressed: complete && !widget.disabled
                 ? () => widget.onSubmit(_pairs.cast<int>(), _centerOf(buttonContext))
                 : null,
-            icon: const Icon(Icons.check_rounded),
-            label: Text(s['answer_button']),
           ),
         ),
     ]);
   }
 }
 
-/// Open task: the answer is a natural number typed digit by digit (no units), like on the answer sheet.
+class _NumberChip extends StatelessWidget {
+  final int number;
+  final bool selected;
+  final bool correct;
+  final List<Color> colors;
+  final VoidCallback? onTap;
+  const _NumberChip({
+    required this.number,
+    required this.selected,
+    required this.correct,
+    required this.colors,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final gradient = correct ? AppGradients.mint : (selected ? colors : null);
+    return Pressable(
+      onTap: onTap,
+      pressedScale: 0.85,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutBack,
+        width: 42,
+        height: 42,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: gradient != null ? AppGradients.of(gradient) : null,
+          color: gradient == null ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.06) : null,
+          boxShadow: gradient != null
+              ? [BoxShadow(color: gradient.last.withValues(alpha: 0.35), blurRadius: 10, offset: const Offset(0, 4))]
+              : null,
+        ),
+        child: correct && !selected
+            ? const Icon(Icons.check_rounded, color: Colors.white, size: 20)
+            : Text('$number',
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: gradient != null ? Colors.white : null)),
+      ),
+    );
+  }
+}
+
+/// Open task: a non-negative number as on the answer sheet — an integer or a decimal with a comma
+/// (up to 9 digits and 4 decimals), no units.
 class NumericInput extends ConsumerStatefulWidget {
   final AnswerFeedback? answer;
   final bool disabled;
@@ -302,6 +378,9 @@ class NumericInput extends ConsumerStatefulWidget {
   ConsumerState<NumericInput> createState() => _NumericInputState();
 }
 
+/// What may be typed so far: digits, then optionally one comma (a dot becomes a comma) and decimals.
+final _partialNumber = RegExp(r'^\d{0,9}(,\d{0,4})?$');
+
 class _NumericInputState extends ConsumerState<NumericInput> {
   late final _controller = TextEditingController(text: widget.answer?.answer.toString() ?? '');
 
@@ -311,41 +390,50 @@ class _NumericInputState extends ConsumerState<NumericInput> {
     super.dispose();
   }
 
+  bool get _complete => RegExp(r'^\d{1,9}(,\d{1,4})?$').hasMatch(_controller.text);
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final answered = widget.answer != null;
     final ok = widget.answer?.isCorrect;
     final color = ok == null ? null : (ok ? AppColors.correct : AppColors.wrong);
+    final border = color == null
+        ? null
+        : OutlineInputBorder(borderRadius: BorderRadius.circular(Radii.md), borderSide: BorderSide(color: color, width: 2));
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       TextField(
         controller: _controller,
         enabled: !answered && !widget.disabled,
-        keyboardType: TextInputType.number,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(9)],
-        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: 6),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [
+          TextInputFormatter.withFunction((old, value) {
+            final text = value.text.replaceAll('.', ',');
+            return _partialNumber.hasMatch(text) ? value.copyWith(text: text) : old;
+          }),
+        ],
+        style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, letterSpacing: 4, color: color),
         textAlign: TextAlign.center,
         decoration: InputDecoration(
           hintText: '0',
           helperText: s['numeric_hint'],
-          enabledBorder: color == null
+          suffixIcon: ok == null
               ? null
-              : OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: color, width: 2)),
-          disabledBorder: color == null
-              ? null
-              : OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: color, width: 2)),
+              : Icon(ok ? Icons.check_circle_rounded : Icons.cancel_rounded, color: color, size: 28),
+          enabledBorder: border,
+          disabledBorder: border,
         ),
         onChanged: (_) => setState(() {}),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: 14),
       if (!answered)
         Builder(
-          builder: (buttonContext) => FilledButton.icon(
-            onPressed: _controller.text.isNotEmpty && !widget.disabled
+          builder: (buttonContext) => GradientButton(
+            label: s['answer_button'],
+            icon: Icons.check_rounded,
+            onPressed: _complete && !widget.disabled
                 ? () => widget.onSubmit(_controller.text, _centerOf(buttonContext))
                 : null,
-            icon: const Icon(Icons.check_rounded),
-            label: Text(s['answer_button']),
           ),
         ),
     ]);

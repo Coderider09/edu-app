@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/l10n/strings.dart';
+import '../../../core/ui/ui.dart';
+import '../auth_scaffold.dart';
 import '../google_sign_in_button.dart';
 import '../session_controller.dart';
 
@@ -62,77 +64,69 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    return Scaffold(
-      body: SafeArea(
-        child: Form(
-          key: _form,
-          child: ListView(padding: const EdgeInsets.all(24), children: [
-            const SizedBox(height: 16),
-            Text(s['create_account'],
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900)),
-            const SizedBox(height: 24),
-            TextFormField(
-              controller: _name,
-              textCapitalization: TextCapitalization.words,
-              decoration: InputDecoration(labelText: s['name'], prefixIcon: const Icon(Icons.badge_rounded)),
-              validator: (v) => (v == null || v.trim().isEmpty) ? s['err_required'] : null,
+    return Form(
+      key: _form,
+      child: AuthScaffold(
+        title: s['create_account'],
+        subtitle: s['register_subtitle'],
+        footer: AuthSwitchLink(text: s['have_account'], onTap: () => context.go('/login')),
+        children: [
+          TextFormField(
+            controller: _name,
+            textCapitalization: TextCapitalization.words,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(labelText: s['name'], prefixIcon: const Icon(Icons.badge_rounded)),
+            validator: (v) => (v == null || v.trim().isEmpty) ? s['err_required'] : null,
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _email,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(labelText: s['email'], prefixIcon: const Icon(Icons.email_rounded)),
+            validator: (v) {
+              final value = v?.trim() ?? '';
+              if (value.isEmpty) return _phone.text.trim().isEmpty ? s['err_required'] : null;
+              return _emailRe.hasMatch(value) ? null : s['err_email'];
+            },
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _phone,
+            keyboardType: TextInputType.phone,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              labelText: s['phone_optional'],
+              hintText: '+992 ...',
+              prefixIcon: const Icon(Icons.phone_rounded),
             ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _email,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(labelText: s['email'], prefixIcon: const Icon(Icons.email_rounded)),
-              validator: (v) {
-                final value = v?.trim() ?? '';
-                if (value.isEmpty) return _phone.text.trim().isEmpty ? s['err_required'] : null;
-                return _emailRe.hasMatch(value) ? null : s['err_email'];
-              },
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _password,
+            obscureText: _obscure,
+            onChanged: (_) => setState(() {}),
+            decoration: InputDecoration(
+              labelText: s['password'],
+              prefixIcon: const Icon(Icons.lock_rounded),
+              suffixIcon: ObscureToggle(obscure: _obscure, onTap: () => setState(() => _obscure = !_obscure)),
             ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _phone,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                labelText: s['phone_optional'],
-                hintText: '+992 ...',
-                prefixIcon: const Icon(Icons.phone_rounded),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _password,
-              obscureText: _obscure,
-              decoration: InputDecoration(
-                labelText: s['password'],
-                prefixIcon: const Icon(Icons.lock_rounded),
-                suffixIcon: IconButton(
-                  icon: Icon(_obscure ? Icons.visibility_rounded : Icons.visibility_off_rounded),
-                  onPressed: () => setState(() => _obscure = !_obscure),
-                ),
-              ),
-              validator: (v) => (v ?? '').length < 8 ? s['err_password_short'] : null,
-            ),
-            AnimatedSize(
-              duration: const Duration(milliseconds: 200),
-              child: _error == null
-                  ? const SizedBox(height: 24)
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                    ),
-            ),
-            FilledButton(
-              onPressed: _busy ? null : _submit,
-              child: _busy
-                  ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 3))
-                  : Text(s['register']),
-            ),
-            const SizedBox(height: 16),
-            const GoogleSignInButton(),
-            const SizedBox(height: 16),
-            TextButton(onPressed: () => context.go('/login'), child: Text(s['have_account'])),
-          ]),
-        ),
+            validator: (v) => (v ?? '').length < 8 ? s['err_password_short'] : null,
+            onFieldSubmitted: (_) => _submit(),
+          ),
+          const SizedBox(height: 10),
+          PasswordStrength(_password.text),
+          FormError(_error),
+          GradientButton(
+            label: s['register'],
+            icon: Icons.rocket_launch_rounded,
+            loading: _busy,
+            colors: brandGradient.take(2).toList(),
+            onPressed: _submit,
+          ),
+          OrDivider(s['or']),
+          const GoogleSignInButton(),
+        ],
       ),
     );
   }

@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/api/api_client.dart';
 import '../../core/l10n/strings.dart';
+import '../../core/theme/app_theme.dart';
+import '../../core/ui/ui.dart';
 import '../../core/settings.dart';
 import '../../core/widgets/common.dart';
 import '../../offline/pack_store.dart';
@@ -77,7 +79,6 @@ class _DownloadsScreenState extends ConsumerState<DownloadsScreen> {
     final lang = ref.watch(settingsProvider).language;
     final pending = ref.watch(pendingSyncProvider);
     final manifest = ref.watch(packManifestProvider);
-    final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(title: Text(s['offline_materials'])),
@@ -87,54 +88,118 @@ class _DownloadsScreenState extends ConsumerState<DownloadsScreen> {
         builder: (m) {
           final missing = m.packs.where((p) => !_upToDate(p)).toList();
           final missingSize = missing.fold<int>(0, (sum, p) => sum + p.sizeBytes);
+          final done = m.packs.length - missing.length;
           return ListView(padding: const EdgeInsets.fromLTRB(20, 8, 20, 32), children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  Row(children: [
-                    Icon(Icons.download_for_offline_rounded, color: scheme.primary, size: 32),
-                    const SizedBox(width: 12),
-                    Expanded(child: Text(s['offline_intro'])),
-                  ]),
-                  const SizedBox(height: 12),
-                  if (missing.isEmpty)
+            FadeSlideIn(
+              child: AuroraBackground(
+                colors: const [Color(0xFF059669), Color(0xFF10B981), Color(0xFF06B6D4)],
+                borderRadius: BorderRadius.circular(Radii.lg),
+                child: Padding(
+                  padding: const EdgeInsets.all(18),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                     Row(children: [
-                      Icon(Icons.check_circle_rounded, color: scheme.primary),
-                      const SizedBox(width: 8),
-                      Text(s['all_downloaded']),
-                    ])
-                  else
-                    FilledButton.icon(
-                      icon: const Icon(Icons.download_rounded),
-                      label: Text(s.f('download_all', {'size': _size(s, missingSize)})),
-                      onPressed: _progress.isEmpty ? () => _download(missing) : null,
+                      ProgressRing(
+                        value: m.packs.isEmpty ? 0 : done / m.packs.length,
+                        size: 76,
+                        stroke: 8,
+                        colors: const [Colors.white, Color(0xFFD1FAE5)],
+                        track: Colors.white24,
+                        child: Text('$done/${m.packs.length}',
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text(s['offline_intro'],
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, height: 1.35)),
+                      ),
+                    ]),
+                    const SizedBox(height: 16),
+                    SmoothSwitcher(
+                      child: missing.isEmpty
+                          ? Row(key: const ValueKey('all'), children: [
+                              const Icon(Icons.verified_rounded, color: Colors.white),
+                              const SizedBox(width: 8),
+                              Text(s['all_downloaded'],
+                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800)),
+                            ])
+                          : Pressable(
+                              key: const ValueKey('download'),
+                              onTap: _progress.isEmpty ? () => _download(missing) : null,
+                              child: Container(
+                                height: 52,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(Radii.md),
+                                ),
+                                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                  const Icon(Icons.download_rounded, color: Color(0xFF059669)),
+                                  const SizedBox(width: 8),
+                                  Flexible(
+                                    child: Text(s.f('download_all', {'size': _size(s, missingSize)}),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            color: Color(0xFF059669), fontWeight: FontWeight.w900, fontSize: 15)),
+                                  ),
+                                ]),
+                              ),
+                            ),
                     ),
-                ]),
+                  ]),
+                ),
               ),
             ),
             if (pending > 0) ...[
-              const SizedBox(height: 8),
-              Card(
-                child: ListTile(
-                  leading: const Icon(Icons.cloud_upload_rounded),
-                  title: Text(s.f('pending_sync', {'n': pending})),
-                  trailing: _syncing
-                      ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
-                      : TextButton(onPressed: _sync, child: Text(s['sync_now'])),
+              const SizedBox(height: 12),
+              FadeSlideIn(
+                delay: Stagger.of(1),
+                child: AppCard(
+                  padding: const EdgeInsets.all(14),
+                  child: Row(children: [
+                    const Pulse(
+                      amplitude: 0.08,
+                      child: IconBadge(Icons.cloud_upload_rounded, colors: AppGradients.sky, size: 44),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(s.f('pending_sync', {'n': pending}),
+                          style: const TextStyle(fontWeight: FontWeight.w700)),
+                    ),
+                    _syncing
+                        ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2.5))
+                        : Pressable(
+                            onTap: _sync,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                              decoration: BoxDecoration(
+                                gradient: AppGradients.of(AppGradients.sky),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(s['sync_now'],
+                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800)),
+                            ),
+                          ),
+                  ]),
                 ),
               ),
             ],
-            SectionTitle(s['subjects']),
-            for (final p in m.packs) _PackTile(
-              pack: p,
-              title: p.title(lang),
-              progress: _progress[p.subjectId],
-              installed: _store.isInstalled(p.subjectId),
-              upToDate: _upToDate(p),
-              onDownload: _progress.isEmpty ? () => _download([p]) : null,
-              onRemove: () => _remove(p),
-            ),
+            SectionHeader(s['subjects']),
+            for (var i = 0; i < m.packs.length; i++)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: FadeSlideIn(
+                  delay: Stagger.of(i + 2),
+                  child: _PackTile(
+                    pack: m.packs[i],
+                    colors: _packColors[i % _packColors.length],
+                    title: m.packs[i].title(lang),
+                    progress: _progress[m.packs[i].subjectId],
+                    installed: _store.isInstalled(m.packs[i].subjectId),
+                    upToDate: _upToDate(m.packs[i]),
+                    onDownload: _progress.isEmpty ? () => _download([m.packs[i]]) : null,
+                    onRemove: () => _remove(m.packs[i]),
+                  ),
+                ),
+              ),
           ]);
         },
       ),
@@ -142,8 +207,18 @@ class _DownloadsScreenState extends ConsumerState<DownloadsScreen> {
   }
 }
 
+const _packColors = [
+  AppGradients.violet,
+  AppGradients.fire,
+  AppGradients.sky,
+  AppGradients.mint,
+  AppGradients.rose,
+  AppGradients.gold,
+];
+
 class _PackTile extends ConsumerWidget {
   final PackInfo pack;
+  final List<Color> colors;
   final String title;
   final double? progress;
   final bool installed;
@@ -152,6 +227,7 @@ class _PackTile extends ConsumerWidget {
   final VoidCallback onRemove;
   const _PackTile({
     required this.pack,
+    required this.colors,
     required this.title,
     required this.progress,
     required this.installed,
@@ -163,38 +239,71 @@ class _PackTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final scheme = Theme.of(context).colorScheme;
     final details = s.f('pack_details', {'questions': pack.questions, 'size': _size(s, pack.sizeBytes)});
     final Widget trailing;
     if (progress != null) {
-      trailing = SizedBox(
-        width: 28,
-        height: 28,
-        child: CircularProgressIndicator(value: progress! > 0 ? progress : null, strokeWidth: 3),
+      trailing = ProgressRing(
+        key: const ValueKey('progress'),
+        value: progress!,
+        size: 40,
+        stroke: 4,
+        colors: colors,
+        duration: const Duration(milliseconds: 150),
+        child: Text('${(progress! * 100).round()}', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900)),
       );
     } else if (installed && upToDate) {
       trailing = PopupMenuButton<String>(
-        icon: Icon(Icons.check_circle_rounded, color: scheme.primary),
+        key: const ValueKey('done'),
+        icon: const Icon(Icons.check_circle_rounded, color: AppColors.correct, size: 28),
         onSelected: (_) => onRemove(),
-        itemBuilder: (_) => [PopupMenuItem(value: 'delete', child: Text(s['delete']))],
+        itemBuilder: (_) => [
+          PopupMenuItem(
+            value: 'delete',
+            child: Row(children: [
+              const Icon(Icons.delete_outline_rounded, color: AppColors.wrong),
+              const SizedBox(width: 8),
+              Text(s['delete']),
+            ]),
+          ),
+        ],
       );
     } else if (installed) {
-      trailing = FilledButton.tonal(onPressed: onDownload, child: Text(s['update']));
+      trailing = Pill(s['update'], key: const ValueKey('update'), icon: Icons.refresh_rounded, color: colors.first);
     } else {
-      trailing = IconButton(
-        icon: const Icon(Icons.download_rounded),
-        tooltip: s['download'],
-        onPressed: onDownload,
+      trailing = Container(
+        key: const ValueKey('download'),
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(shape: BoxShape.circle, gradient: AppGradients.of(colors)),
+        child: const Icon(Icons.download_rounded, color: Colors.white, size: 22),
       );
     }
-    return Card(
-      child: ListTile(
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        subtitle: Text(installed
-            ? '$details · ${s[upToDate ? 'downloaded' : 'update_available']}'
-            : details),
-        trailing: trailing,
-      ),
+    final tappable = progress == null && !(installed && upToDate);
+    return AppCard(
+      padding: const EdgeInsets.all(14),
+      onTap: tappable ? onDownload : null,
+      child: Row(children: [
+        IconBadge(Icons.inventory_2_rounded, colors: colors, size: 46, glow: false),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(title, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+            const SizedBox(height: 3),
+            Text(installed ? '$details · ${s[upToDate ? 'downloaded' : 'update_available']}' : details,
+                style: TextStyle(color: mutedOf(context), fontSize: 12.5)),
+            if (progress != null) ...[
+              const SizedBox(height: 8),
+              GradientBar(value: progress!, colors: colors, height: 6),
+            ],
+          ]),
+        ),
+        const SizedBox(width: 10),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (child, a) => ScaleTransition(scale: a, child: child),
+          child: trailing,
+        ),
+      ]),
     );
   }
 }
@@ -207,17 +316,29 @@ class OfflinePromoCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (ref.watch(packStoreProvider).installed.isNotEmpty) return const SizedBox.shrink();
     final s = ref.watch(stringsProvider);
-    final scheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Card(
-        color: scheme.secondaryContainer,
-        child: ListTile(
-          leading: Icon(Icons.download_for_offline_rounded, color: scheme.onSecondaryContainer, size: 32),
-          title: Text(s['offline_banner_title'], style: const TextStyle(fontWeight: FontWeight.w700)),
-          subtitle: Text(s['offline_banner_text']),
-          trailing: const Icon(Icons.chevron_right_rounded),
+      padding: const EdgeInsets.only(top: 16),
+      child: FadeSlideIn(
+        delay: const Duration(milliseconds: 300),
+        child: AppCard(
           onTap: () => context.push('/downloads'),
+          gradient: AppGradients.of([
+            AppGradients.mint.first.withValues(alpha: 0.16),
+            AppGradients.sky.first.withValues(alpha: 0.16),
+          ]),
+          border: Border.all(color: AppGradients.mint.first.withValues(alpha: 0.35)),
+          child: Row(children: [
+            const Float(
+                distance: 3, child: IconBadge(Icons.cloud_download_rounded, colors: AppGradients.mint, size: 48)),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(s['offline_banner_title'], style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
+                Text(s['offline_banner_text'], style: TextStyle(color: mutedOf(context), fontSize: 13)),
+              ]),
+            ),
+            Icon(Icons.arrow_forward_ios_rounded, size: 16, color: mutedOf(context)),
+          ]),
         ),
       ),
     );

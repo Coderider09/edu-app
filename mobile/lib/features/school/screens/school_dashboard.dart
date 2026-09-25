@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/strings.dart';
+import '../../../core/ui/ui.dart';
 import '../../../core/widgets/common.dart';
 import '../../../data/models.dart';
 import '../../home/home_screen.dart';
@@ -23,23 +24,22 @@ class SchoolDashboard extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: AsyncBody<Dashboard>(
           value: dashboard,
           onRetry: refresh,
           loading: const DashboardSkeleton(),
           builder: (data) => RefreshIndicator(
             onRefresh: refresh,
-            child: ListView(padding: const EdgeInsets.fromLTRB(20, 12, 20, 32), children: [
+            child: ListView(padding: Gap.page.copyWith(top: 12), children: [
               if (data.fromCache) const Padding(padding: EdgeInsets.only(bottom: 12), child: OfflineBanner()),
-              DashboardHeader(data: data, subtitle: s.f('grade_n', {'n': data.grade ?? ''})),
-              const OfflinePromoCard(),
+              FadeSlideIn(child: DashboardHeader(data: data, subtitle: s.f('grade_n', {'n': data.grade ?? ''}))),
+              const QuickActions(abiturient: false),
               if (data.unfinished != null) ContinueTestCard(attempt: data.unfinished!),
-              SectionTitle(s['subjects']),
+              const OfflinePromoCard(),
+              SectionHeader(s['subjects']),
               if (data.subjects.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32),
-                  child: Text(s['no_subjects'], textAlign: TextAlign.center),
-                )
+                EmptyState(icon: Icons.menu_book_rounded, text: s['no_subjects'], colors: AppGradients.gold)
               else
                 SubjectGrid(
                   subjects: data.subjects,

@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../config/app_config.dart';
 import '../../core/l10n/strings.dart';
+import '../../core/ui/ui.dart';
 import '../../core/widgets/common.dart';
 import 'session_controller.dart';
 
@@ -41,12 +42,33 @@ class _GoogleSignInButtonState extends ConsumerState<GoogleSignInButton> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    return OutlinedButton.icon(
-      onPressed: _busy ? null : _signIn,
-      icon: _busy
-          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-          : const Text('G', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Color(0xFF4285F4))),
-      label: Text(s['google_sign_in']),
+    return Pressable(
+      onTap: _busy ? null : _signIn,
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          color: surfaceOf(context),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Theme.of(context).colorScheme.outlineVariant, width: 1.5),
+        ),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          _busy
+              ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.5))
+              : ShaderMask(
+                  shaderCallback: (r) => const SweepGradient(colors: [
+                    Color(0xFF4285F4),
+                    Color(0xFF34A853),
+                    Color(0xFFFBBC05),
+                    Color(0xFFEA4335),
+                    Color(0xFF4285F4),
+                  ]).createShader(r),
+                  child:
+                      const Text('G', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white)),
+                ),
+          const SizedBox(width: 12),
+          Text(s['google_sign_in'], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        ]),
+      ),
     );
   }
 }

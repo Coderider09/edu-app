@@ -1,0 +1,4 @@
+tags:
+  # Design review screenshots: flutter test --tags screenshots --run-skipped --update-goldens
+  screenshots:
+    skip: "Renders PNG screenshots for design review; run explicitly"
