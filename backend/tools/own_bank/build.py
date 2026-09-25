@@ -44,6 +44,36 @@ def _texts(task: dict) -> list[str]:
     return [task["text"], task["explanation"], task.get("passage") or "", *task["options"], *(task.get("left") or [])]
 
 
+def script_errors(texts: list[str], lang: str) -> list[str]:
+    """Typos invisible to the eye: letters of other Cyrillic alphabets, Latin letters inside Cyrillic words."""
+    errors = []
+    foreign = sorted({m for t in texts for m in FOREIGN_CYRILLIC.findall(t)}) if lang == "tj" else []
+    if foreign:
+        errors.append("letters of another Cyrillic alphabet: " + ", ".join(foreign))
+    mixed = sorted({w for t in texts for w in MIXED_WORD.findall(t)})
+    if mixed:
+        errors.append("Cyrillic and Latin letters in one word: " + ", ".join(mixed))
+    return errors
+
+
+def shuffle_options(record: dict, seed: str) -> dict:
+    """Deterministic shuffle: the right answer is not always «A», and rebuilding changes nothing.
+
+    For matching the right column is shuffled, so the answer pattern doesn't repeat from task to task.
+    """
+    if record["type"] == "single":
+        options = list(record["options"])
+        random.Random(seed).shuffle(options)
+        record["correct"] = [options.index(record["options"][record["correct"][0]])]
+        record["options"] = options
+    elif record["type"] == "matching":
+        order = list(range(len(record["options"])))
+        random.Random(seed).shuffle(order)
+        record["correct"] = [order.index(c) for c in record["correct"]]
+        record["options"] = [record["options"][i] for i in order]
+    return record
+
+
 def check_translation(task: dict, original: dict) -> list[str]:
     """A translated task must keep the original's type, topic, difficulty and answer key."""
     errors = []
@@ -95,13 +125,7 @@ def build_source(module_name: str) -> tuple[Path, list[dict]]:
     records = []
     failed = False
     for i, task in enumerate(module.TASKS, start=1):
-        errors = validate(task)
-        if lang == "tj" and any(FOREIGN_CYRILLIC.search(t) for t in _texts(task)):
-            errors.append("letters of another Cyrillic alphabet: " + ", ".join(
-                sorted({m for t in _texts(task) for m in FOREIGN_CYRILLIC.findall(t)})))
-        mixed = sorted({w for t in _texts(task) for w in MIXED_WORD.findall(t)})
-        if mixed:
-            errors.append("Cyrillic and Latin letters in one word: " + ", ".join(mixed))
+        errors = validate(task) + script_errors(_texts(task), lang)
         topic_tj = None
         if originals is not None:
             original = originals[i - 1]
@@ -121,19 +145,8 @@ def build_source(module_name: str) -> tuple[Path, list[dict]]:
         record = {"subject": subject, "language": lang, "number": counters[task["type"]], **task}
         if topic_tj:
             record["topic_tj"] = topic_tj
-        if task["type"] == "single":
-            # Deterministic shuffle: the right answer is not always «A», and rebuilding changes nothing
-            options = list(task["options"])
-            random.Random(f"{subject}-{lang}-{record['number']}").shuffle(options)
-            record["options"] = options
-            record["correct"] = [options.index(task["options"][0])]
-        elif task["type"] == "matching":
-            # The same for the right column: the answer pattern shouldn't repeat from task to task
-            order = list(range(len(task["options"])))
-            random.Random(f"{subject}-{lang}-m{record['number']}").shuffle(order)
-            record["options"] = [task["options"][i] for i in order]
-            record["correct"] = [order.index(c) for c in task["correct"]]
-        records.append(record)
+        prefix = "" if task["type"] == "single" else "m"
+        records.append(shuffle_options(record, f"{subject}-{lang}-{prefix}{record['number']}"))
     if failed:
         sys.exit(1)
     return OUT_DIR / f"{subject}_{lang}.json", records

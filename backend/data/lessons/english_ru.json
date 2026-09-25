@@ -1,0 +1,1456 @@
+{
+ "subject": "english",
+ "language": "ru",
+ "lessons": [
+  {
+   "topic": "Как устроен субтест «Английский язык»",
+   "topic_tj": "Субтести «Забони англисӣ» чӣ гуна сохта шудааст",
+   "title": "Как устроен субтест и как к нему готовиться",
+   "content": "# Как устроен субтест «Английский язык»\n\n**25 заданий**: 20 с выбором ответа и 5 на соответствие. Максимум — **40 очков**.\n\n## Три части\n| Часть | Что проверяют |\n|---|---|\n| Reading comprehension | понимание текста: главная мысль, детали, значение слова по контексту |\n| Grammar | времена, залог, условные предложения, модальные глаголы, косвенная речь |\n| Vocabulary / practical items | значения слов, устойчивые сочетания, фразовые глаголы, словообразование |\n\n## Как готовиться\n1. **Грамматика по схемам.** Для каждого времени запомните формулу и слова-маркеры (always, now, yesterday,\n   since, by the time).\n2. **Слова — в сочетаниях**: make a mistake, do homework, heavy traffic, pay attention.\n3. **Читайте каждый день** короткие тексты (новости, рассказы) и пересказывайте главную мысль одним\n   предложением.\n\n## Как решать задания на пропуск\nСначала найдите **слова-подсказки** в предложении (маркеры времени, предлоги, союзы), затем проверьте\nвариант, подставив его в предложение целиком.\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "Which word is a time marker of Present Continuous?",
+     "options": [
+      "usually",
+      "yesterday",
+      "ago",
+      "now"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "now, at the moment, look! — признаки действия, происходящего сейчас."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "Choose the correct collocation.",
+     "options": [
+      "do a mistake",
+      "get a mistake",
+      "take a mistake",
+      "make a mistake"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Устойчивое сочетание: make a mistake."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "Сколько заданий на соответствие в субтесте «Английский язык»?",
+     "options": [
+      "5",
+      "4",
+      "0",
+      "2"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "20 заданий с выбором ответа и 5 на соответствие."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Which marker is typical of Present Perfect?",
+     "options": [
+      "last week",
+      "in 2010",
+      "since",
+      "yesterday"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "since и for, already, yet, just — маркеры Present Perfect; yesterday, last week — Past Simple."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Choose the correct collocation: Please, ___ attention to the board.",
+     "options": [
+      "pay",
+      "give",
+      "make",
+      "do"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Устойчивое сочетание: pay attention."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Choose the correct collocation: I have to ___ my homework.",
+     "options": [
+      "take",
+      "do",
+      "make",
+      "get"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "do homework, do exercises, do the shopping."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "What is the best first step when you see a gap in a sentence?",
+     "options": [
+      "choose option A",
+      "find the clue words in the sentence",
+      "skip the task",
+      "choose the longest option"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Маркеры времени, предлоги и союзы подсказывают правильную форму."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Choose the correct collocation: There was ___ rain last night.",
+     "options": [
+      "strong",
+      "heavy",
+      "thick",
+      "big"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "heavy rain, heavy traffic — устойчивые сочетания."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "What does «the main idea of the text» mean?",
+     "options": [
+      "a detail from the text",
+      "the longest paragraph",
+      "the first sentence",
+      "the most important point of the whole text"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Главная мысль охватывает весь текст, а не отдельную деталь."
+    }
+   ]
+  },
+  {
+   "topic": "Present Simple и Present Continuous",
+   "topic_tj": "Present Simple ва Present Continuous",
+   "title": "Present Simple и Present Continuous: регулярное и происходящее сейчас",
+   "content": "# Present Simple и Present Continuous\n\n## Present Simple — факты, привычки, расписания\n- Утверждение: I/you/we/they **work**; he/she/it **works** (окончание **-s**!).\n- Отрицание и вопрос с **do/does**: She doesn't work. Does she work?\n- Маркеры: always, usually, often, sometimes, never, every day.\n- Расписания: The train **leaves** at 6.\n\n## Present Continuous — действие сейчас или временное\n- am/is/are + V-ing: She **is reading** now.\n- Маркеры: now, at the moment, Look!, Listen!, this week.\n- Планы на ближайшее будущее: We **are meeting** him tomorrow.\n\n## Глаголы состояния\nKnow, like, love, want, understand, believe, own, need **не употребляются** в Continuous:\n~~I am knowing~~ → I **know**.\n\n## Сравните\n- He **plays** football every Sunday. (привычка)\n- He **is playing** football now. (сейчас)\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "She ___ to school every day.",
+     "options": [
+      "going",
+      "go",
+      "goes",
+      "is going"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Регулярное действие (every day), третье лицо — окончание -es."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "Look! The children ___ in the garden.",
+     "options": [
+      "play",
+      "are playing",
+      "played",
+      "plays"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Look! — действие происходит в момент речи, Present Continuous."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "I ___ what you mean.",
+     "options": [
+      "understands",
+      "am understanding",
+      "understand",
+      "am understand"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "understand — глагол состояния, в Continuous не используется."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The film ___ at 7 p.m., so let's hurry.",
+     "options": [
+      "is starting now",
+      "starts",
+      "starting",
+      "start"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Расписание — Present Simple."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "___ your brother ___ in a bank?",
+     "options": [
+      "Does ... works",
+      "Does ... work",
+      "Do ... work",
+      "Is ... work"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Вопрос в Present Simple для he/she/it — does + глагол без -s."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "We ___ our grandparents tomorrow — the tickets are already bought.",
+     "options": [
+      "are visiting",
+      "visits",
+      "visit",
+      "visited"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Запланированное на ближайшее будущее — Present Continuous."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "She usually ___ tea, but today she ___ coffee.",
+     "options": [
+      "is drinking ... drinks",
+      "drinks ... is drinking",
+      "drink ... drinking",
+      "drinks ... drinks"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "usually — привычка (Simple), today — временная ситуация (Continuous)."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "He ___ a new car. (to own)",
+     "options": [
+      "is owning",
+      "owns",
+      "own",
+      "owning"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "own — глагол состояния."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Water ___ at 100 °C.",
+     "options": [
+      "is boiling",
+      "boil",
+      "boiled",
+      "boils"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Научный факт — Present Simple."
+    }
+   ]
+  },
+  {
+   "topic": "Прошедшие времена",
+   "topic_tj": "Замонҳои гузашта",
+   "title": "Past Simple, Past Continuous, Past Perfect, used to",
+   "content": "# Прошедшие времена\n\n## Past Simple — завершённое действие в прошлом\n- Правильные глаголы: + **-ed** (worked); неправильные — вторая форма (go — **went**, see — **saw**).\n- Вопрос и отрицание с **did**: Did you see him? I didn't see him.\n- Маркеры: yesterday, last year, ago, in 2020.\n\n## Past Continuous — процесс в момент прошлого\n- was/were + V-ing: At 8 p.m. I **was watching** TV.\n- Длительное действие прерывается кратким: I **was reading** when he **came**.\n\n## Past Perfect — «предпрошедшее»\n- had + V3: When we arrived, the film **had started**.\n- Маркеры: before, by the time, already (в прошлом).\n\n## used to — привычка в прошлом\nI **used to play** chess (раньше играл, теперь нет). Не путать с **be used to + V-ing** (привык):\nI'm used to getting up early.\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "I ___ my grandmother last Sunday.",
+     "options": [
+      "was visit",
+      "visited",
+      "have visited",
+      "visit"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "last Sunday — завершённое действие в прошлом, Past Simple."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "When the phone rang, I ___ a shower.",
+     "options": [
+      "was taking",
+      "take",
+      "took",
+      "had taken"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Длительное действие прервано звонком — Past Continuous."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "By the time we arrived, the train ___.",
+     "options": [
+      "had left",
+      "left",
+      "has left",
+      "was leaving"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Действие завершилось до другого момента в прошлом — Past Perfect."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "She ___ in Dushanbe when she was a child.",
+     "options": [
+      "used to living",
+      "is used to live",
+      "used to live",
+      "use to lived"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Привычка или состояние в прошлом — used to + V."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Did you ___ the news yesterday?",
+     "options": [
+      "heard",
+      "hears",
+      "hearing",
+      "hear"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "После did — глагол в начальной форме."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "While I ___ dinner, my brother ___ his homework.",
+     "options": [
+      "was cooking ... was doing",
+      "cooked ... did",
+      "cook ... was doing",
+      "was cooking ... did"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Два параллельных длительных процесса в прошлом — Past Continuous."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The past form of «bring» is",
+     "options": [
+      "brung",
+      "bringed",
+      "brought",
+      "brang"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "bring — brought — brought (неправильный глагол)."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "He said he ___ that film before.",
+     "options": [
+      "saw",
+      "has seen",
+      "had seen",
+      "sees"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Действие раньше другого прошедшего действия — Past Perfect."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "I ___ to school by bus, but now I walk.",
+     "options": [
+      "am used to go",
+      "use to go",
+      "used to going",
+      "used to go"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Раньше было, сейчас нет — used to + V."
+    }
+   ]
+  },
+  {
+   "topic": "Present Perfect и будущее время",
+   "topic_tj": "Present Perfect ва замони оянда",
+   "title": "Present Perfect, Future Simple, be going to, Future Perfect",
+   "content": "# Present Perfect и будущее время\n\n## Present Perfect\n- have/has + V3: I **have finished**.\n- Результат к настоящему моменту, опыт: Have you ever **been** to London?\n- Маркеры: already, yet, just, ever, never, since, for, recently, this week.\n- **Не употребляется** с точным прошедшим временем: ~~I have seen him yesterday~~ → I **saw** him yesterday.\n- Present Perfect Continuous (have been + V-ing): действие длится до сих пор — I **have been learning**\n  English for 3 years.\n\n## Будущее время\n| Форма | Когда | Пример |\n|---|---|---|\n| will + V | решение в момент речи, прогноз | I'll help you. |\n| be going to + V | план, намерение; признаки сейчас | Look at the clouds! It's going to rain. |\n| Present Continuous | договорённость | I'm meeting Ali at 5. |\n| will have + V3 (Future Perfect) | завершится к моменту в будущем | By 2030 I will have graduated. |\n\n## Время в придаточных времени и условия\nПосле when, if, before, after, as soon as будущее выражается **Present Simple**: I'll call you when I **arrive**.\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "I have ___ my homework already.",
+     "options": [
+      "do",
+      "done",
+      "doing",
+      "did"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Present Perfect: have + третья форма глагола (do — did — done)."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "I ___ him yesterday.",
+     "options": [
+      "saw",
+      "see",
+      "have seen",
+      "had saw"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Точное время в прошлом (yesterday) — Past Simple."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "I'll phone you when I ___ home.",
+     "options": [
+      "will get",
+      "get",
+      "am getting",
+      "got"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "В придаточном времени после when — Present Simple вместо будущего."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "She ___ English for five years and still studies it.",
+     "options": [
+      "is learning",
+      "learns",
+      "has been learning",
+      "learned"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Действие началось в прошлом и продолжается — Present Perfect Continuous."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Look at those black clouds! It ___.",
+     "options": [
+      "rained",
+      "will rain",
+      "rains",
+      "is going to rain"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Есть признаки в настоящем — be going to."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "By next June, I ___ school.",
+     "options": [
+      "will have finished",
+      "finish",
+      "have finished",
+      "will finish"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Завершится к моменту в будущем — Future Perfect."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Have you ___ been to Samarkand?",
+     "options": [
+      "since",
+      "ever",
+      "ago",
+      "yet"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "ever — «когда-либо» в вопросах о жизненном опыте."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The phone is ringing. — I ___ it!",
+     "options": [
+      "answer",
+      "'ll answer",
+      "am going to answer",
+      "have answered"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Решение, принятое в момент речи, — will."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "We have lived here ___ 2015.",
+     "options": [
+      "from",
+      "since",
+      "for",
+      "ago"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "since + момент начала, for + период (for ten years)."
+    }
+   ]
+  },
+  {
+   "topic": "Страдательный залог",
+   "topic_tj": "Ҳолати мафъулӣ",
+   "title": "Passive Voice: формы и употребление",
+   "content": "# Страдательный залог (Passive Voice)\n\n## Формула\n**be (в нужном времени) + V3**. Используется, когда важен сам факт или объект, а не исполнитель.\nИсполнитель вводится предлогом **by**: The book was written **by** Tolstoy.\n\n## Таблица форм\n| Время | Пассив | Пример |\n|---|---|---|\n| Present Simple | am/is/are + V3 | English **is spoken** here. |\n| Past Simple | was/were + V3 | The bridge **was built** in 2010. |\n| Present Continuous | am/is/are being + V3 | The road **is being repaired**. |\n| Present Perfect | have/has been + V3 | The letter **has been sent**. |\n| Future Simple | will be + V3 | The results **will be announced** tomorrow. |\n| с модальным | modal + be + V3 | The work **must be done** today. |\n\n## Как узнать пассив\nПодлежащее **не выполняет** действие: The window was broken (окно разбили).\n\n## Частые ошибки\n- Пропуск глагола be: ~~The house built in 1990~~ → The house **was** built in 1990.\n- Неверная третья форма: write — wrote — **written**.\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "The letter ___ yesterday.",
+     "options": [
+      "sent",
+      "was send",
+      "was sent",
+      "is sent"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Past Simple Passive: was/were + V3."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "English ___ in many countries.",
+     "options": [
+      "speaks",
+      "spoken",
+      "is spoken",
+      "is speaking"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Present Simple Passive: is + V3."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "The road ___ at the moment, so we can't drive there.",
+     "options": [
+      "is being repaired",
+      "repairs",
+      "was repaired",
+      "is repaired"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Процесс сейчас — Present Continuous Passive."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The results ___ next week.",
+     "options": [
+      "are announced",
+      "will be announced",
+      "announced",
+      "will announce"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Future Simple Passive: will be + V3."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "This work must ___ today.",
+     "options": [
+      "been done",
+      "be do",
+      "do",
+      "be done"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Модальный глагол + be + V3."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "«Hamlet» ___ by Shakespeare.",
+     "options": [
+      "was written",
+      "has written",
+      "was wrote",
+      "wrote"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Исполнитель после by, форма written."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Three new schools ___ in our city since 2020.",
+     "options": [
+      "have built",
+      "have been built",
+      "are built",
+      "were built"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "since — Present Perfect Passive: have been + V3."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Which sentence is in the passive voice?",
+     "options": [
+      "The children have eaten the cake.",
+      "The cake was eaten by the children.",
+      "The children are eating the cake.",
+      "The children ate the cake."
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Подлежащее (cake) не выполняет действие."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The thief ___ by the police last night.",
+     "options": [
+      "was caught",
+      "is caught",
+      "was catched",
+      "caught"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "catch — caught — caught; last night — Past Simple Passive."
+    }
+   ]
+  },
+  {
+   "topic": "Условные предложения",
+   "topic_tj": "Ҷумлаҳои шартӣ",
+   "title": "Conditionals: нулевой, первый, второй, третий типы; I wish",
+   "content": "# Условные предложения\n\n| Тип | Когда | Схема | Пример |\n|---|---|---|---|\n| Zero | общая истина | If + Present, Present | If you heat ice, it **melts**. |\n| First | реальное будущее | If + Present, will + V | If it **rains**, we **will stay** home. |\n| Second | нереальное настоящее | If + Past, would + V | If I **were** rich, I **would travel**. |\n| Third | нереальное прошлое | If + Past Perfect, would have + V3 | If he **had studied**, he **would have passed**. |\n\n- Во втором типе с I/he/she употребляется **were**: If I were you…\n- В части с if **не бывает will**: ~~If it will rain~~.\n- **Смешанный тип**: If I **had studied** harder (прошлое), I **would have** a better job now (настоящее).\n- **Unless** = if not: I won't go unless you come.\n\n## I wish\n- Сожаление о настоящем: I wish I **knew** the answer.\n- Сожаление о прошлом: I wish I **hadn't said** that.\n- Недовольство чужим поведением: I wish you **would stop** talking.\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "If it rains tomorrow, we ___ at home.",
+     "options": [
+      "stayed",
+      "will stay",
+      "stay",
+      "would stay"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Реальное условие в будущем — First Conditional."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "If I ___ you, I would apologise.",
+     "options": [
+      "were",
+      "had been",
+      "am",
+      "will be"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Second Conditional: If I were you."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "If he had left earlier, he ___ the train.",
+     "options": [
+      "didn't miss",
+      "won't miss",
+      "wouldn't have missed",
+      "wouldn't miss"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Third Conditional: would have + V3."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "If you mix red and white, you ___ pink.",
+     "options": [
+      "will got",
+      "got",
+      "get",
+      "would get"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Общая истина — Zero Conditional."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "I wish I ___ more free time now.",
+     "options": [
+      "have",
+      "had",
+      "had had",
+      "will have"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Сожаление о настоящем — I wish + Past Simple."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "I won't help you ___ you ask politely.",
+     "options": [
+      "when",
+      "because",
+      "if",
+      "unless"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "unless = if not: не помогу, если не попросишь вежливо."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "If she ___ the instructions, she wouldn't have made the mistake.",
+     "options": [
+      "has read",
+      "would read",
+      "had read",
+      "read"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Third Conditional: If + Past Perfect."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "I wish I ___ so much yesterday.",
+     "options": [
+      "hadn't eaten",
+      "won't eat",
+      "don't eat",
+      "didn't eat"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Сожаление о прошлом — I wish + Past Perfect."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "If I ___ harder at school, I would be a doctor now.",
+     "options": [
+      "studied",
+      "had studied",
+      "study",
+      "would study"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Смешанный тип: условие в прошлом, результат в настоящем."
+    }
+   ]
+  },
+  {
+   "topic": "Модальные глаголы",
+   "topic_tj": "Феълҳои модалӣ",
+   "title": "Модальные глаголы: can, must, have to, should, may, might, need",
+   "content": "# Модальные глаголы\n\n| Глагол | Значение | Пример |\n|---|---|---|\n| can / could | умение, возможность, просьба | I can swim. Could you help me? |\n| must | необходимость (мнение говорящего), уверенность | You must see this film. He must be tired. |\n| have to | необходимость по обстоятельствам | I have to get up at 6. |\n| mustn't | запрет | You mustn't smoke here. |\n| don't have to / needn't | нет необходимости | You don't have to come. |\n| should | совет | You should see a doctor. |\n| may / might | разрешение, предположение | It might rain. |\n\n## После модальных — глагол без to\n~~You must to go~~ → You **must go**. Исключения: have to, ought to, be able to.\n\n## Модальные с перфектом (о прошлом)\n- **must have + V3** — наверняка было: He must have forgotten.\n- **can't have + V3** — не может быть, чтобы было: You can't have seen him — he was abroad.\n- **should have + V3** — следовало, но не сделал: You should have told me.\n- **needn't have + V3** — сделал зря: You needn't have bought milk.\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "You ___ smoke here. It's forbidden.",
+     "options": [
+      "don't have to",
+      "can",
+      "needn't",
+      "mustn't"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Запрет выражается глаголом mustn't («нельзя»)."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "You look ill. You ___ see a doctor.",
+     "options": [
+      "should",
+      "can't",
+      "mustn't",
+      "needn't"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Совет выражается глаголом should («следует»)."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "Choose the correct sentence.",
+     "options": [
+      "She can to play the piano.",
+      "She can plays the piano.",
+      "She can play the piano.",
+      "She cans play the piano."
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "После can — глагол без to и без окончания."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "It's Sunday. You ___ get up early.",
+     "options": [
+      "can't",
+      "shouldn't",
+      "don't have to",
+      "mustn't"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Нет необходимости — don't have to (mustn't означало бы запрет)."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "He isn't answering. He ___ asleep.",
+     "options": [
+      "can be",
+      "should be",
+      "has to be",
+      "must be"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Уверенное предположение — must be."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "You ___ told me earlier! Now it's too late.",
+     "options": [
+      "needn't have",
+      "should have",
+      "must have",
+      "can't have"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Упрёк о прошлом: следовало, но не сделал."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "She ___ written this letter — she can't write in English.",
+     "options": [
+      "should have",
+      "must have",
+      "needn't have",
+      "can't have"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Уверенность, что в прошлом этого не было."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "We ___ bought so much bread — nobody was hungry.",
+     "options": [
+      "needn't have",
+      "can't have",
+      "mustn't have",
+      "should have"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Сделали, но в этом не было необходимости."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "___ you open the window, please?",
+     "options": [
+      "Should",
+      "Need",
+      "Must",
+      "Could"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Вежливая просьба — Could you…?"
+    }
+   ]
+  },
+  {
+   "topic": "Косвенная речь",
+   "topic_tj": "Нутқи ғайримустақим",
+   "title": "Reported Speech: согласование времён, вопросы, просьбы",
+   "content": "# Косвенная речь (Reported Speech)\n\n## Согласование времён (если вводный глагол в прошедшем: said, told, asked)\n| Прямая речь | Косвенная речь |\n|---|---|\n| Present Simple: «I work» | Past Simple: he said he **worked** |\n| Present Continuous: «I am working» | he said he **was working** |\n| Past Simple / Present Perfect | Past Perfect: he said he **had worked** |\n| will | **would** |\n| can / may | could / might |\n\n## Изменение слов\nnow → then; today → that day; tomorrow → **the next day**; yesterday → **the day before**; here → there;\nthis → that; ago → before.\n\n## Вопросы\n- Общий вопрос: **if/whether** + прямой порядок слов: «Do you like tea?» → She asked **if I liked** tea.\n- Специальный вопрос: вопросительное слово + прямой порядок: «Where do you live?» → He asked **where I lived**.\n\n## Просьбы и приказы\ntell/ask + (not) **to** + V: «Close the door» → He told me **to close** the door. «Don't be late» → She asked me\n**not to be** late.\n\n## say и tell\nsay (something), tell **somebody** (something): He **told me** that… / He **said** that…\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "«I am tired», she said. → She said she ___ tired.",
+     "options": [
+      "was",
+      "has been",
+      "is",
+      "will be"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Present Simple → Past Simple."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "«Where do you live?» he asked. → He asked where ___.",
+     "options": [
+      "I live",
+      "do I live",
+      "did I live",
+      "I lived"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "В косвенном вопросе прямой порядок слов и сдвиг времени."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "«I will call you tomorrow», he said. → He said he would call me ___.",
+     "options": [
+      "tomorrow",
+      "the next day",
+      "the day before",
+      "yesterday"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "tomorrow → the next day."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "«Do you speak English?» she asked me. → She asked me ___ English.",
+     "options": [
+      "if I spoke",
+      "do I speak",
+      "that I spoke",
+      "did I speak"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Общий вопрос — if/whether + прямой порядок."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "«Don't open the window», the teacher said to us. → The teacher told us ___ the window.",
+     "options": [
+      "not open",
+      "don't open",
+      "not to open",
+      "to not opened"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Отрицательная просьба — not to + V."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "«I have lost my key», he said. → He said he ___ his key.",
+     "options": [
+      "was lost",
+      "has lost",
+      "had lost",
+      "lost"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Present Perfect → Past Perfect."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "He ___ me that he was busy.",
+     "options": [
+      "spoke",
+      "asked",
+      "told",
+      "said"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "tell + кому: told me; said — без дополнения «кому»."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "«I can swim», the boy said. → The boy said he ___ swim.",
+     "options": [
+      "was able",
+      "will",
+      "can",
+      "could"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "В косвенной речи can меняется на could."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "«I saw him yesterday», she said. → She said she had seen him ___.",
+     "options": [
+      "tomorrow",
+      "the day before",
+      "yesterday",
+      "the next day"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "yesterday → the day before."
+    }
+   ]
+  },
+  {
+   "topic": "Словообразование и фразовые глаголы",
+   "topic_tj": "Калимасозӣ ва феълҳои фразеологӣ",
+   "title": "Суффиксы, приставки, фразовые глаголы, ложные друзья",
+   "content": "# Словообразование и фразовые глаголы\n\n## Суффиксы\n| Часть речи | Суффиксы | Примеры |\n|---|---|---|\n| существительные | -tion, -ment, -ness, -er/-or, -ity | construction, development, happiness, teacher, ability |\n| прилагательные | -ful, -less, -able, -ous, -al, -ive | useful, careless, readable, dangerous, national, creative |\n| наречия | -ly | quickly, carefully |\n| глаголы | -ize, -en | organize, widen |\n\n## Приставки со значением «не»\nun- (unhappy), in-/im-/il-/ir- (incorrect, impossible, illegal, irregular), dis- (dislike).\n\n## -ing и -ed прилагательные\nThe film was **boring** (вызывает скуку) — I was **bored** (испытываю скуку).\n\n## Фразовые глаголы\n| Глагол | Значение |\n|---|---|\n| look after | заботиться |\n| look for | искать |\n| give up | бросить (привычку), сдаться |\n| put off | отложить |\n| turn down | отказать, убавить звук |\n| get on with | ладить |\n| find out | узнать |\n| run out of | закончиться (о запасах) |\n\n## Ложные друзья\nactual — фактический (не «актуальный»), magazine — журнал (не «магазин»), sympathetic — сочувствующий.\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "Choose the noun: The ___ of the bridge took two years. (build)",
+     "options": [
+      "built",
+      "building",
+      "builds",
+      "builder"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "После the и перед of нужно существительное: building — строительство."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "Choose the opposite of «possible».",
+     "options": [
+      "inpossible",
+      "impossible",
+      "unpossible",
+      "dispossible"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Перед p используется im-: impossible."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "«Look after» means",
+     "options": [
+      "look for",
+      "look at",
+      "find",
+      "take care of"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "look after — заботиться."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The lecture was so ___ that I fell asleep.",
+     "options": [
+      "boredom",
+      "boring",
+      "bored",
+      "bore"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "-ing описывает то, что вызывает чувство."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "We have run ___ of milk. Can you buy some?",
+     "options": [
+      "down",
+      "out",
+      "off",
+      "up"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "run out of — закончиться."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "She was very ___ when she heard the news. (surprise)",
+     "options": [
+      "surprise",
+      "surprising",
+      "surprised",
+      "surprisingly"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "-ed описывает чувство человека."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "He decided to give ___ smoking.",
+     "options": [
+      "up",
+      "off",
+      "in",
+      "away"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "give up — бросить привычку."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Choose the adjective: This medicine is very ___ . (use)",
+     "options": [
+      "usage",
+      "useful",
+      "user",
+      "usefully"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Суффикс -ful образует прилагательное."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "«Magazine» means",
+     "options": [
+      "a journal with articles and pictures",
+      "a market",
+      "a storehouse",
+      "a shop"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Ложный друг: magazine — журнал, магазин — shop."
+    }
+   ]
+  },
+  {
+   "topic": "Чтение и понимание текста",
+   "topic_tj": "Хониш ва фаҳмиши матн",
+   "title": "Стратегии чтения: главная мысль, детали, слово по контексту",
+   "content": "# Чтение и понимание текста\n\n## Порядок работы с текстом\n1. Прочитайте **вопросы** — узнаете, что искать.\n2. Просмотрите текст целиком: о чём он? Главная мысль часто в **первом или последнем абзаце**.\n3. Для вопросов на детали найдите в тексте **ключевые слова** из вопроса (или их синонимы) и перечитайте\n   это место внимательно.\n\n## Типы вопросов\n| Вопрос | Как отвечать |\n|---|---|\n| Main idea | выбирайте вариант, который охватывает **весь** текст, а не одну деталь |\n| True / False / Not stated | ответ должен прямо следовать из текста, а не из ваших знаний |\n| Meaning of a word | подставьте варианты в предложение, смотрите на соседние слова |\n| Why does the author…? | ищите объяснение в соседних предложениях |\n\n## Ловушки\n- Вариант повторяет слова текста, но смысл искажён.\n- Вариант верен в жизни, но в тексте этого нет.\n- Слова-«усилители»: always, never, all, only — часто делают вариант неверным.\n\n## Синонимы помогают\nТекст: «The glacier is **retreating**». Вопрос: «The glacier is **getting smaller**».\n",
+   "check": [
+    {
+     "type": "single",
+     "difficulty": "easy",
+     "text": "Where is the main idea of a text often found?",
+     "options": [
+      "in the first or the last paragraph",
+      "in the questions",
+      "in the middle of the longest sentence",
+      "only in the title"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "Авторы часто формулируют главную мысль во вступлении или заключении."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "What should you read first when doing a reading task?",
+     "options": [
+      "only the title",
+      "the questions",
+      "the last word of the text",
+      "nothing, just guess"
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "Вопросы подсказывают, какую информацию искать в тексте."
+    },
+    {
+     "type": "single",
+     "difficulty": "medium",
+     "text": "Which answer is usually correct for «What is the main idea?»",
+     "options": [
+      "the option with the word «always»",
+      "the option with a small detail",
+      "the option that covers the whole text",
+      "the longest option"
+     ],
+     "correct": [
+      2
+     ],
+     "explanation": "Главная мысль относится ко всему тексту."
+    }
+   ],
+   "practice": [
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The text says: «Few people came to the meeting.» Which statement is true?",
+     "options": [
+      "The meeting was cancelled.",
+      "The meeting was not well attended.",
+      "Nobody came to the meeting.",
+      "Many people came."
+     ],
+     "correct": [
+      1
+     ],
+     "explanation": "few — «мало» (но не «никто»)."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The text says: «He hardly slept last night.» This means he",
+     "options": [
+      "slept hard",
+      "didn't want to sleep",
+      "slept a lot",
+      "slept very little"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "hardly — «едва, почти не»."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The text says: «The price rose sharply.» The word «sharply» means",
+     "options": [
+      "quickly and strongly",
+      "slowly",
+      "clearly",
+      "a little"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "rise sharply — резко вырасти."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "Which word often makes an option wrong in True/False tasks?",
+     "options": [
+      "sometimes",
+      "often",
+      "some",
+      "always"
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "Категоричные слова (always, never, all) редко подтверждаются текстом полностью."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The text says: «Despite the rain, the match went on.» What happened?",
+     "options": [
+      "The match started after the rain.",
+      "It didn't rain.",
+      "The match was stopped because of the rain.",
+      "The match continued in spite of the rain."
+     ],
+     "correct": [
+      3
+     ],
+     "explanation": "despite — «несмотря на»."
+    },
+    {
+     "type": "single",
+     "difficulty": "hard",
+     "text": "The text says: «The museum is closed on Mondays.» Which question can you answer?",
+     "options": [
+      "Can I visit the museum on Monday?",
+      "Who works at the museum?",
+      "How much is a ticket?",
+      "When was the museum built?"
+     ],
+     "correct": [
+      0
+     ],
+     "explanation": "В тексте есть только информация о выходном дне."
+    }
+   ]
+  }
+ ]
+}

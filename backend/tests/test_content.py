@@ -32,10 +32,11 @@ def test_subject_tree_with_theory_and_official_sections(client, db, abiturient):
     tree = client.get(f"/api/v1/subjects/{subject_id(db)}/topics", headers=abiturient).json()
     titles = [s["title"] for s in tree["sections"]]
     assert titles == [
-        "Краткая теория: Алгебра", "Краткая теория: Геометрия", "Задания повышенной сложности",
-        "Задания с выбором ответа", "Задания на соответствие", "Задания открытого типа",
+        "Краткая теория: Алгебра", "Краткая теория: Геометрия", "Уроки и упражнения",
+        "Задания повышенной сложности", "Задания с выбором ответа", "Задания на соответствие",
+        "Задания открытого типа",
     ]
-    official = tree["sections"][3]
+    official = tree["sections"][4]
     assert [t["title"] for t in official["topics"]] == ["Тема A", "Тема B"]
     assert official["has_final_test"] is True
 

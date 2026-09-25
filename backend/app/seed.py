@@ -29,6 +29,7 @@ from app.models import (
     Topic,
     User,
 )
+from app.seed_lessons import load_lesson_banks, seed_lessons
 from app.seed_ntc import load_bank, load_own_banks, seed_bank, seed_own_bank, seed_structure
 from app.services.gamification import ACHIEVEMENTS_SEED
 
@@ -544,7 +545,7 @@ def seed_superadmin(db: Session) -> None:
 
 def seed_content(
     db: Session, bank_path: Optional[Path] = None, bank: Optional[dict] = None,
-    own_dir: Optional[Path] = None,
+    own_dir: Optional[Path] = None, lessons_dir: Optional[Path] = None,
 ) -> None:
     subjects = seed_structure(db)
 
@@ -571,6 +572,9 @@ def seed_content(
     if count:
         print(f"Own tasks loaded: {count}")
 
+    count = seed_lessons(db, subjects, load_lesson_banks(lessons_dir))
+    if count:
+        print(f"Lessons loaded: {count}")
 
 
 def run() -> None:
